@@ -41,7 +41,6 @@ async function getMetaInfos() {
 
     const metaJSONPath = path.resolve(n);
     const metaJSON = JSON.parse(fs.readFileSync(metaJSONPath));
-    /* eslint-disable-next-line */
     dic[routePath] = { asEntry, filePath, routePath, metaJSON: metaJSON, level: routePath.split('/').length }
 
     list.push(dic[routePath]);

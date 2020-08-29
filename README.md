@@ -10,7 +10,7 @@
 ```js
 // in webpack.base.config.js
 ...
-require('./makeRoutes')
+require('vue-auto-create-route')
 ...
 
 ```

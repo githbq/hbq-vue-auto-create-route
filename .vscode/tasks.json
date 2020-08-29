@@ -1,0 +1,20 @@
+{
+    "version": "2.0.0",
+    "presentation": {
+        "echo": true,
+        "focus": true,
+        "panel": "new",
+        "showReuseMessage": false,
+        "clear": false
+    },
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "监听编译typescript",
+            "group": "build",
+            "command": [
+                "npm run tsc:w"
+            ]
+        }
+    ]
+}

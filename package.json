@@ -1,0 +1,42 @@
+{
+    "name": "hbq-vue-auto-create-route",
+    "version": "1.0.0",
+    "description": "hbq-vue-auto-create-route",
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org"
+    },
+    "main": "build/index.js",
+    "scripts": {
+        "start:build": "npm run tsc && node build",
+        "start": "node run",
+        "test": "jest --forceExit --detectOpenHandles",
+        "clear": "rimraf build",
+        "tsc": "npm run clear && tsc",
+        "tsc:w": "npm run tsc -- -w",
+        "p": "npm run tsc && npm publish",
+        "lint": "tslint \"src/**/*.ts\" --fix",
+        "precommit": "npm run lint"
+    },
+    "dependencies": {"tslib": "^1.13.0"},
+    "devDependencies": {
+        "@types/node": "^12.12.53",
+        "husky": "^4.2.3",
+        "jest": "^25.5.4",
+        "rimraf": "^2.7.1",
+        "ts-node": "^8.10.2",
+        "tslint": "^6.1.2",
+        "typescript": "^3.9.7"
+    },
+    "keywords": [
+        "typescript",
+        "module-polierplate",
+        "hbq-vue-auto-create-route"
+    ],
+    "husky": {
+        "hooks": {"pre-commit": "npm run lint"}
+    },
+    "author": "hubiqing",
+    "repository": "https://github.com/githbq/hbq-module-boilerplate.git",
+    "engines": {"node": ">=10"},
+    "license": "MIT"
+}

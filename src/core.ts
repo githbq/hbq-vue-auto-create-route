@@ -16,9 +16,11 @@ const placeholders = {
   name: '##name##',
   filePath: '##filePath##',
 }
+
 function replacePathSplit(dir) {
   return (dir || '').replace(/\\/g, '/')
 }
+
 async function getMetaInfos() {
   const dic = {}
   const list = []
@@ -41,8 +43,8 @@ async function getMetaInfos() {
 
     const metaJSONPath = path.resolve(n)
     const metaJSON = JSON.parse(fs.readFileSync(metaJSONPath))
-    dic[routePath] = { asEntry, filePath, routePath, metaJSON: metaJSON, level: routePath.split('/').length }
 
+    dic[routePath] = { asEntry, filePath, routePath, metaJSON: metaJSON, level: routePath.split('/').length }
     list.push(dic[routePath])
   })
   list.forEach(n => {
@@ -84,7 +86,6 @@ function createRouteTemplate(tree) {
     const metaInfo = node.metaJSON
 
     replaceTasks.push({ key: placeholders.meta, value: JSON.stringify(metaInfo) })
-
     replaceTasks.push({ key: placeholders.filePath, value: node.filePath })
     replaceTasks.push({ key: placeholders.name, value: node.routePath })
 

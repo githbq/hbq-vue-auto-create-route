@@ -1,13 +1,13 @@
-const globby = require('globby');
-const fs = require('fs-extra');
-const path = require('path');
-const { hyphen } = require('naming-style');
-const beautify = require('js-beautify').js;
-const debounce = require('lodash.debounce');
-const template = require('./template');
+const globby = require('globby')
+const fs = require('fs-extra')
+const path = require('path')
+const { hyphen } = require('naming-style')
+const beautify = require('js-beautify').js
+const debounce = require('lodash.debounce')
+const template = require('./template')
 
 
-const defaultComponent = '@/components/main';
+const defaultComponent = '@/components/main'
 const placeholders = {
   component: '##component##',
   meta: '##meta##',
@@ -15,127 +15,127 @@ const placeholders = {
   path: '##path##',
   name: '##name##',
   filePath: '##filePath##',
-};
+}
 function replacePathSplit(dir) {
-  return (dir || '').replace(/\\/g, '/');
+  return (dir || '').replace(/\\/g, '/')
 }
 async function getMetaInfos() {
-  const dic = {};
-  const list = [];
-  let maxLevel = 0;
-  const metaInfos = await globby(['src/pages/**/meta.json', '!**/components/**/*']);
+  const dic = {}
+  const list = []
+  let maxLevel = 0
+  const metaInfos = await globby(['src/pages/**/meta.json', '!**/components/**/*'])
   metaInfos.forEach(n => {
-    n = replacePathSplit(n);
-    let asEntry = false;
-    const entryFilePath = replacePathSplit(path.resolve(path.dirname(n), 'index.vue'));
-    asEntry = fs.existsSync(entryFilePath);
-    const filePath = replacePathSplit(path.dirname(n)).replace(/^src\//, '');
-    let tempPath = replacePathSplit(path.relative('src/pages', n));
+    n = replacePathSplit(n)
+    let asEntry = false
+    const entryFilePath = replacePathSplit(path.resolve(path.dirname(n), 'index.vue'))
+    asEntry = fs.existsSync(entryFilePath)
+    const filePath = replacePathSplit(path.dirname(n)).replace(/^src\//, '')
+    let tempPath = replacePathSplit(path.relative('src/pages', n))
 
-    tempPath = replacePathSplit(path.dirname(tempPath));
-    const routePath = tempPath.split('/').map(m => hyphen(m)).join('/');
-    const level = routePath.split('/').length;
+    tempPath = replacePathSplit(path.dirname(tempPath))
+    const routePath = tempPath.split('/').map(m => hyphen(m)).join('/')
+    const level = routePath.split('/').length
     if (level > maxLevel) {
-      maxLevel = level;
+      maxLevel = level
     }
 
-    const metaJSONPath = path.resolve(n);
-    const metaJSON = JSON.parse(fs.readFileSync(metaJSONPath));
+    const metaJSONPath = path.resolve(n)
+    const metaJSON = JSON.parse(fs.readFileSync(metaJSONPath))
     dic[routePath] = { asEntry, filePath, routePath, metaJSON: metaJSON, level: routePath.split('/').length }
 
-    list.push(dic[routePath]);
-  });
+    list.push(dic[routePath])
+  })
   list.forEach(n => {
     if (n.metaJSON.index === undefined) {
-      n.metaJSON.index = 99;
+      n.metaJSON.index = 99
     }
-  });
-  list.sort((a, b) => a.metaJSON.index - b.metaJSON.index);
-  list.forEach(n => delete n.metaJSON.index);
-  return { dic, list, maxLevel };
+  })
+  list.sort((a, b) => a.metaJSON.index - b.metaJSON.index)
+  list.forEach(n => delete n.metaJSON.index)
+  return { dic, list, maxLevel }
 }
 
 function makeTree(data, level = 1, prefix = '') {
-  const roots = data.filter(n => n.level === level && n.metaJSON.hidden !== true && n.routePath.indexOf(prefix) === 0);
-  const others = data.filter(n => n.level > level);
+  const roots = data.filter(n => n.level === level && n.metaJSON.hidden !== true && n.routePath.indexOf(prefix) === 0)
+  const others = data.filter(n => n.level > level)
   if (others.length > 0) {
     roots.forEach(n => {
-      n.children = makeTree(others, level + 1, n.routePath);
-    });
+      n.children = makeTree(others, level + 1, n.routePath)
+    })
   }
-  return roots;
+  return roots
 }
 
 function createRouteTemplate(tree) {
-  let totalString = '';
-  const templateStrs = [];
+  let totalString = ''
+  const templateStrs = []
   tree.forEach(node => {
-    let isParent = false;
-    let templateStr = template.node;
-    const hasChildren = node.children && node.children.length > 0;
-    const replaceTasks = [];
+    let isParent = false
+    let templateStr = template.node
+    const hasChildren = node.children && node.children.length > 0
+    const replaceTasks = []
     if (node.level === 1 && !hasChildren) {
-      templateStr = template.singleParentNode;
+      templateStr = template.singleParentNode
     } else if (hasChildren) {
-      templateStr = node.asEntry ? template.parentWithEntryNode : template.parentNode;
-      isParent = true;
+      templateStr = node.asEntry ? template.parentWithEntryNode : template.parentNode
+      isParent = true
     }
     // 通用替换部分
-    const metaInfo = node.metaJSON;
+    const metaInfo = node.metaJSON
 
-    replaceTasks.push({ key: placeholders.meta, value: JSON.stringify(metaInfo) });
+    replaceTasks.push({ key: placeholders.meta, value: JSON.stringify(metaInfo) })
 
-    replaceTasks.push({ key: placeholders.filePath, value: node.filePath });
-    replaceTasks.push({ key: placeholders.name, value: node.routePath });
+    replaceTasks.push({ key: placeholders.filePath, value: node.filePath })
+    replaceTasks.push({ key: placeholders.name, value: node.routePath })
 
-    const componentPath = node.metaJSON.component || defaultComponent;
-    replaceTasks.push({ key: placeholders.component, value: componentPath });
-    delete node.metaJSON.componentPath;
+    const componentPath = node.metaJSON.component || defaultComponent
+    replaceTasks.push({ key: placeholders.component, value: componentPath })
+    delete node.metaJSON.componentPath
     // 父节点部分
     if (isParent || node.level === 1) {
-      let children = '';
+      let children = ''
       if (hasChildren) {
-        children = createRouteTemplate(node.children);
+        children = createRouteTemplate(node.children)
       }
-      replaceTasks.push({ key: placeholders.children, value: children });
+      replaceTasks.push({ key: placeholders.children, value: children })
 
-      let routePath = node.routePath.split('/').pop();
+      let routePath = node.routePath.split('/').pop()
       if (node.level === 1) {
-        routePath = `/${node.routePath}`;
+        routePath = `/${node.routePath}`
       }
-      replaceTasks.push({ key: placeholders.path, value: routePath });
+      replaceTasks.push({ key: placeholders.path, value: routePath })
     }
     // 子节点部分
     if (!isParent) {
-      const routePath = node.routePath.split('/').pop();
-      replaceTasks.push({ key: placeholders.path, value: routePath });
+      const routePath = node.routePath.split('/').pop()
+      replaceTasks.push({ key: placeholders.path, value: routePath })
     }
     replaceTasks.forEach(task => {
-      templateStr = templateStr.replace(new RegExp(task.key, 'g'), task.value);
-    });
-    templateStrs.push(templateStr);
-  });
-  totalString = templateStrs.filter(n => !!n).join(',');
+      templateStr = templateStr.replace(new RegExp(task.key, 'g'), task.value)
+    })
+    templateStrs.push(templateStr)
+  })
+  totalString = templateStrs.filter(n => !!n).join(',')
 
-  return totalString;
+  return totalString
 }
 
 
 const run = async () => {
   // 1.获取所有页面元信息
-  const metaInfos = await getMetaInfos();
+  const metaInfos = await getMetaInfos()
   // 2.转换成树形
-  const metaTree = makeTree(metaInfos.list);
+  const metaTree = makeTree(metaInfos.list)
   // 3.生成路由JS字符串
-  const finalStr = createRouteTemplate(metaTree);
+  const finalStr = createRouteTemplate(metaTree)
   // 4.写入文件
-  const tempRouteFilePath = path.join(process.cwd(), 'src', 'router', 'temp.router.js');
+  const tempRouteFilePath = path.join(process.cwd(), 'src', 'router', 'temp.router.js')
   await fs.outputFile(
     tempRouteFilePath,
     beautify(`export default [${finalStr}]`, { indent_size: 2, space_in_empty_paren: true }),
-  );
+  )
   // 5.完成
-  console.log('\n自动生成vue路由成功@', tempRouteFilePath, '\n');
-};
+  console.log('\n自动生成vue路由成功@', tempRouteFilePath, '\n')
+}
 
-module.exports = { run: debounce(run, 100) };
+module.exports = { run: debounce(run, 100) }

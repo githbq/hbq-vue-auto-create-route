@@ -1,6 +1,7 @@
-# 项目描述
+# vue 自动生成 vue-routes 支持webpackPlugin方式使用
 
-# 自动生成 vue routes 到 @/routes/temp.router.js
+## 智能识别vue项目页面结构，自动生成 vue routes 到 @/routes/temp.router.js
+
  
 根据 `@/src/pages/**/meta.json` 自动生成 vue routes
 
@@ -16,7 +17,7 @@
 6. 监听 `src/pages` 目录下的 `meta.json` 文件变化自动重新创建路由
 7. 支持使用 `webpackplugin` 方式使用
 8. process.env.NODE_ENV 为 production 时，不会开启watch监听
-9. 需要搭配固定根组件 @/components/main 作为各页面的框架组件
+9. 需要搭配固定根组件 `@/components/main` 作为各页面的框架组件
 
 请保证有 `@/components/main.vue` 作为主框架容器组件，你的菜单组件可以在此应用
 

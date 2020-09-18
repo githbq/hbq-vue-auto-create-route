@@ -63,7 +63,7 @@
 ## 直接使用
 
 ``` js
- ...
+ ...ts
  import vueAutoCreateRoute from 'vue-auto-create-route'
  // 在任意文件中执行
  vueAutoCreateRoute()

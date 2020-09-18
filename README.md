@@ -16,7 +16,7 @@
 6. 每个 `meta.json` 旁需要有 `index.vue` 才会视化可用路由，详见源码 `src/examples` 下目录结构示例
 6. 监听 `src/pages` 目录下的 `meta.json` 文件变化自动重新创建路由
 7. 支持 `webpackplugin` 方式使用
-8. process.env.NODE_ENV 为 production 时，不会开启watch监听
+8. process.env.NODE_ENV 为 production 时，不会开启 watch 监听
 9. 需要搭配固定根组件 `@/components/main` 作为各页面的框架组件
 
 请保证有 `@/components/main.vue` 作为主框架容器组件，你的菜单组件可以在此应用

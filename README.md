@@ -48,7 +48,6 @@
         "icon": "el-icon-s-help"
     },
     "component": "@/components/empty-page-container.vue", //非必须配置，手动改变页面对应的组件，通常不需要配置
-    "hideInBread": true,
     "access": [
         "ADMIN",
         "USER VISITOR",

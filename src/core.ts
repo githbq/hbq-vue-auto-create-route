@@ -22,7 +22,7 @@ function replacePathSplit(dir) {
 }
 
 async function getMetaInfos(cwd) {
-  const pagesPath = path.join(cwd, 'src/pages')
+  const pagesPath = 'src/pages'
   const dic = {}
   const list = []
   let maxLevel = 0
@@ -42,7 +42,7 @@ async function getMetaInfos(cwd) {
       maxLevel = level
     }
 
-    const metaJSONPath = path.resolve(n)
+    const metaJSONPath = path.resolve(cwd, n)
     const metaJSON = JSON.parse(fs.readFileSync(metaJSONPath))
 
     dic[routePath] = { asEntry, filePath, routePath, metaJSON: metaJSON, level: routePath.split('/').length }

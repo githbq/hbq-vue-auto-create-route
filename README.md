@@ -1,20 +1,8 @@
 # 项目描述
 
 # 自动生成 vue routes 到 @/routes/temp.router.js
-
-待最终完善!
-
-根据 @/src/pages/**/meta.json 自动生成 vue routes
-
-> 执行时机： webpack.base.config.js 中自执行
-
-``` js
- ...
- import vueAutoCreateRoute from 'vue-auto-create-route'
- // 在任意文件中执行
- vueAutoCreateRoute()
-     ...
-```
+ 
+根据 `@/src/pages/**/meta.json` 自动生成 vue routes
 
 特点:
 
@@ -69,7 +57,19 @@
 }
 ```
 
-## webpack plugin 模式
+# 使用
+
+## 直接使用
+
+``` js
+ ...
+ import vueAutoCreateRoute from 'vue-auto-create-route'
+ // 在任意文件中执行
+ vueAutoCreateRoute()
+     ...
+```
+
+## webpack plugin 模式使用
 
 ``` ts
 import * as webpack from 'webpack'

@@ -43,12 +43,13 @@
 
 ``` js
 {
-    "menu": { //如果不需要展示主界面菜单上，则不配置 menu 项
+    "menu": { //自定义 示例，如果不需要展示主界面菜单上，则不配置 menu 项
         "title": "看板管理",
         "icon": "el-icon-s-help"
     },
-    "component": "@/components/empty-page-container.vue", //非必须配置，手动改变页面对应的组件，通常不需要配置
-    "access": [
+    "index": 1, // 内置属性，非必须，用于干预页面路由生成的顺序
+    "component": "@/components/empty-page-container.vue", //内置属性，非必须，手动改变页面对应的组件，通常不需要配置
+    "access": [ //自定义 示例，用于页面权限定义
         "ADMIN",
         "USER VISITOR",
         "GUEST",
@@ -95,3 +96,28 @@ webpack({
 
 1. 在根目录下 **.gitignore** 文件追加一行忽略匹配规则 `temp.*`
 2. 在根目录下 **.eslintignore** 文件追加一行忽略匹配规则 `temp.*`
+
+## 最终生成的 @/routes/temp.route.js
+
+你可以直接使用该文件读取对应的 `meta` 节点数据供导航菜单组件使用
+
+``` 
+export default [{
+  path: '/home',
+  component: () => import('@/components/main'),
+  meta: {
+    "menu": {
+      "title": "home",
+      "icon": "el-icon-s-help"
+    },
+    "yourCustom": "用户可以自定义任何属性",
+    "index_describe": "index属性决定生成的菜单顺序，非必填",
+    "access": ["ADMIN", "USER VISITOR", "GUEST", "VISITOR"]
+  },
+  children: [{
+    path: '/',
+    name: 'home',
+    component: () => import('@/pages/home'),
+  }, ],
+}]
+```

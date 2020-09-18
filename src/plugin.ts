@@ -1,9 +1,14 @@
 const pluginName = 'autoCreateVueRouteWebpackPlugin'
 
-class ConsoleLogOnBuildWebpackPlugin {
+export default class ConsoleLogOnBuildWebpackPlugin {
+    private options: any
+    constructor(options) {
+        this.options = options
+    }
     apply(compiler) {
-        compiler.hooks.run.tap(pluginName, compilation => {
+        compiler.hooks.beforeRun.tap(pluginName, compilation => {
             console.log('webpack 构建过程开始！')
+            console.log(this.options)
         })
     }
 }

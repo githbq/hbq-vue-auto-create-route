@@ -21,18 +21,19 @@ function replacePathSplit(dir) {
   return (dir || '').replace(/\\/g, '/')
 }
 
-async function getMetaInfos() {
+async function getMetaInfos(cwd, pagesFolder?) {
+  const pagesPath = path.join(cwd, pagesFolder || 'src/pages')
   const dic = {}
   const list = []
   let maxLevel = 0
-  const metaInfos = await globby(['src/pages/**/meta.json', '!**/components/**/*'])
+  const metaInfos = await globby([path.join(pagesPath, `**/meta.json`), '!**/components/**/*'], { cwd })
   metaInfos.forEach(n => {
     n = replacePathSplit(n)
     let asEntry = false
     const entryFilePath = replacePathSplit(path.resolve(path.dirname(n), 'index.vue'))
     asEntry = fs.existsSync(entryFilePath)
-    const filePath = replacePathSplit(path.dirname(n)).replace(/^src\//, '')
-    let tempPath = replacePathSplit(path.relative('src/pages', n))
+    const filePath = replacePathSplit(path.dirname(n)).replace('src', '')
+    let tempPath = replacePathSplit(path.relative(pagesPath, n))
 
     tempPath = replacePathSplit(path.dirname(tempPath))
     const routePath = tempPath.split('/').map(m => hyphen(m)).join('/')
@@ -122,21 +123,22 @@ function createRouteTemplate(tree) {
 }
 
 
-const run = async () => {
+const run = async ({ cwd, pagesFolder, outputRouteFilePath }, hideConsole) => {
+  let newCwd = replacePathSplit(cwd || path.resolve('.'))
   // 1.获取所有页面元信息
-  const metaInfos = await getMetaInfos()
+  const metaInfos = await getMetaInfos(newCwd, pagesFolder)
   // 2.转换成树形
   const metaTree = makeTree(metaInfos.list)
   // 3.生成路由JS字符串
   const finalStr = createRouteTemplate(metaTree)
   // 4.写入文件
-  const tempRouteFilePath = path.join(process.cwd(), 'src', 'router', 'temp.router.js')
+  const tempRouteFilePath = outputRouteFilePath || path.join(cwd, 'src', 'router', 'temp.router.js')
   await fs.outputFile(
     tempRouteFilePath,
     beautify(`export default [${finalStr}]`, { indent_size: 2, space_in_empty_paren: true }),
   )
   // 5.完成
-  console.log('\n自动生成vue路由成功@', tempRouteFilePath, '\n')
+  !hideConsole && console.log('\n自动生成vue路由成功@', tempRouteFilePath, '\n')
 }
 
 module.exports = { run: debounce(run, 100) }

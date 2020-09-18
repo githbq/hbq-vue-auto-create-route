@@ -15,7 +15,8 @@
         "tsc:w": "npm run tsc -- -w",
         "p": "npm run tsc && npm publish",
         "lint": "tslint \"src/**/*.ts\" --fix",
-        "precommit": "npm run lint"
+        "precommit": "npm run lint",
+        "examples": "ts-node './src/examples'"
     },
     "dependencies": {
         "chokidar": "^3.4.2",
@@ -33,7 +34,8 @@
         "rimraf": "^2.7.1",
         "ts-node": "^8.10.2",
         "tslint": "^6.1.2",
-        "typescript": "^3.9.7"
+        "typescript": "^3.9.7",
+        "webpack": "^4.44.2"
     },
     "keywords": [
         "typescript",
@@ -41,10 +43,14 @@
         "hbq-vue-auto-create-route"
     ],
     "husky": {
-        "hooks": {"pre-commit": "npm run lint"}
+        "hooks": {
+            "pre-commit": "npm run lint"
+        }
     },
     "author": "hubiqing",
     "repository": "https://github.com/githbq/hbq-vue-auto-create-route.git",
-    "engines": {"node": ">=10"},
+    "engines": {
+        "node": ">=10"
+    },
     "license": "MIT"
 }

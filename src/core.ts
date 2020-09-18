@@ -1,10 +1,10 @@
-const globby = require('globby')
-const fs = require('fs-extra')
-const path = require('path')
-const { hyphen } = require('naming-style')
-const beautify = require('js-beautify').js
-const debounce = require('lodash.debounce')
-const template = require('./template')
+import * as  globby from 'globby'
+import * as  fs from 'fs-extra'
+import * as  path from 'path'
+import { hyphen } from 'naming-style'
+import { js as beautify } from 'js-beautify'
+import * as  debounce from 'lodash.debounce'
+import template from './template'
 
 
 const defaultComponent = '@/components/main'

@@ -13,7 +13,7 @@
 3. 修改页面路径直接修改文件夹名称即可
 4. 自动对路径转中划线处理
 5. 采用 `meta.json` 方式配置页面元信息实现更多定制化需求场景
-6. 每个 `meta.json` 旁需要有 `index.vue` 才会视化可用路由，详见源码 `src/examples` 下目录结构示例
+6. 每个 `meta.json` 旁需要有 `index.vue` 才会视为可用路由，详见源码 `src/examples` 下目录结构示例
 6. 监听 `src/pages` 目录下的 `meta.json` 文件变化自动重新创建路由
 7. 支持 `webpackplugin` 方式使用
 8. process.env.NODE_ENV 为 production 时，不会开启 watch 监听

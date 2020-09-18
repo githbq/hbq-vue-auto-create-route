@@ -27,11 +27,11 @@ async function getMetaInfos(cwd) {
   const list = []
   let maxLevel = 0
   const metaInfos = await globby([path.join(pagesPath, `**/meta.json`), '!**/components/**/*'], { cwd })
-  metaInfos.forEach(n => {
+  const promises = metaInfos.map(async n => {
     n = replacePathSplit(n)
     let asEntry = false
     const entryFilePath = replacePathSplit(path.resolve(path.dirname(n), 'index.vue'))
-    asEntry = fs.existsSync(entryFilePath)
+    asEntry = await fs.pathExists(entryFilePath)
     const filePath = replacePathSplit(path.dirname(n)).replace(/^src\//, '')
     let tempPath = replacePathSplit(path.relative(pagesPath, n))
 
@@ -43,11 +43,12 @@ async function getMetaInfos(cwd) {
     }
 
     const metaJSONPath = path.resolve(cwd, n)
-    const metaJSON = JSON.parse(fs.readFileSync(metaJSONPath))
+    const metaJSON = await fs.readJSON(metaJSONPath)
 
     dic[routePath] = { asEntry, filePath, routePath, metaJSON: metaJSON, level: routePath.split('/').length }
     list.push(dic[routePath])
   })
+  await Promise.all(promises)
   list.forEach(n => {
     if (n.metaJSON.index === undefined) {
       n.metaJSON.index = 99

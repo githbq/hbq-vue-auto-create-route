@@ -1,6 +1,6 @@
 # vue 自动生成 vue-routes 支持webpackPlugin方式使用
 
-## 智能识别vue项目页面结构，自动生成 vue routes 到 @/routes/temp.router.js
+## 智能识别vue项目页面结构，自动生成 vue routes 到 @/router/temp.router.js
 
  
 根据 `@/src/pages/**/meta.json` 自动生成 vue routes

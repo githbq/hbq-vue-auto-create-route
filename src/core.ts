@@ -21,8 +21,8 @@ function replacePathSplit(dir) {
   return (dir || '').replace(/\\/g, '/')
 }
 
-async function getMetaInfos(cwd, pagesFolder?) {
-  const pagesPath = path.join(cwd, pagesFolder || 'src/pages')
+async function getMetaInfos(cwd) {
+  const pagesPath = path.join(cwd, 'src/pages')
   const dic = {}
   const list = []
   let maxLevel = 0
@@ -32,7 +32,7 @@ async function getMetaInfos(cwd, pagesFolder?) {
     let asEntry = false
     const entryFilePath = replacePathSplit(path.resolve(path.dirname(n), 'index.vue'))
     asEntry = fs.existsSync(entryFilePath)
-    const filePath = replacePathSplit(path.dirname(n)).replace('src', '')
+    const filePath = replacePathSplit(path.dirname(n)).replace(/^src\//, '')
     let tempPath = replacePathSplit(path.relative(pagesPath, n))
 
     tempPath = replacePathSplit(path.dirname(tempPath))
@@ -123,10 +123,10 @@ function createRouteTemplate(tree) {
 }
 
 
-const run = async ({ cwd, pagesFolder, outputRouteFilePath }, hideConsole) => {
+const main = async ({ cwd, outputRouteFilePath }, hideConsole) => {
   let newCwd = replacePathSplit(cwd || path.resolve('.'))
   // 1.获取所有页面元信息
-  const metaInfos = await getMetaInfos(newCwd, pagesFolder)
+  const metaInfos = await getMetaInfos(newCwd)
   // 2.转换成树形
   const metaTree = makeTree(metaInfos.list)
   // 3.生成路由JS字符串
@@ -140,5 +140,4 @@ const run = async ({ cwd, pagesFolder, outputRouteFilePath }, hideConsole) => {
   // 5.完成
   !hideConsole && console.log('\n自动生成vue路由成功@', tempRouteFilePath, '\n')
 }
-
-module.exports = { run: debounce(run, 100) }
+export const run = debounce(main, 100) 

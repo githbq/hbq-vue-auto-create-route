@@ -1,8 +1,9 @@
-const chokidar = require('chokidar')
-const core = require('./core')
+import * as  chokidar from 'chokidar'
+import * as path from 'path'
+import * as core from './core'
 const replacePathSplit = (str) => str.replace(/\\/g, '')
 
-export default (options, watchOptions, isWatch) => {
+export default (options?, watchOptions?, isWatch = true) => {
   const newOptions = { ...options }
   const run = core.run.bind(null, newOptions, newOptions.hideConsole)
   // 生产模式不监听

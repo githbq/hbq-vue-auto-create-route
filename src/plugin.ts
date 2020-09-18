@@ -1,14 +1,18 @@
+import vueAutoCreateRoute from './index'
 const pluginName = 'autoCreateVueRouteWebpackPlugin'
 
 export default class ConsoleLogOnBuildWebpackPlugin {
     private options: any
-    constructor(options) {
+    private isWatch: any
+    private watchOptions: any
+    constructor(options, watchOptions?, isWatch = true) {
         this.options = options
+        this.isWatch = isWatch
+        this.watchOptions = watchOptions
     }
     apply(compiler) {
         compiler.hooks.beforeRun.tap(pluginName, compilation => {
-            console.log('webpack 构建过程开始！')
-            console.log(this.options)
+            vueAutoCreateRoute(this.options, this.watchOptions, this.isWatch)
         })
     }
 }

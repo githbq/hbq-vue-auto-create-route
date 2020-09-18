@@ -5,10 +5,10 @@ import * as path from 'path'
 
 webpack({
     context: __dirname,
-    output: { path: path.resolve(__dirname, 'dist') },
+    output: { path: path.join(__dirname, 'dist') },
     entry: path.join(__dirname, 'entry'),
     plugins: [
-        new VueAutoCreateRoute({ cwd: __dirname })
+        new VueAutoCreateRoute({ cwd: __dirname }, null, false)
     ]
 },
     (err, stats) => {

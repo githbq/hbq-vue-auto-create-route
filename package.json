@@ -40,7 +40,8 @@
     "keywords": [
         "typescript",
         "module-polierplate",
-        "hbq-vue-auto-create-route"
+        "hbq-vue-auto-create-route",
+        "webpackplugin"
     ],
     "husky": {
         "hooks": {

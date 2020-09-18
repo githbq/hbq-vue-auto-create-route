@@ -97,7 +97,7 @@ webpack({
 1. 在根目录下 **.gitignore** 文件追加一行忽略匹配规则 `temp.*`
 2. 在根目录下 **.eslintignore** 文件追加一行忽略匹配规则 `temp.*`
 
-## 最终生成的 @/routes/temp.route.js
+## 最终生成的 @/router/temp.route.js
 
 你可以直接使用该文件读取对应的 `meta` 节点数据供导航菜单组件使用
 

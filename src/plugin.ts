@@ -1,7 +1,7 @@
 import vueAutoCreateRoute from './index'
 const pluginName = 'autoCreateVueRouteWebpackPlugin'
 
-export default class AutoCreateVueRouteWebpackPlugin {
+export class AutoCreateVueRouteWebpackPlugin {
     private options: any
     private isWatch: any
     private watchOptions: any
@@ -16,3 +16,5 @@ export default class AutoCreateVueRouteWebpackPlugin {
         })
     }
 }
+
+export default AutoCreateVueRouteWebpackPlugin

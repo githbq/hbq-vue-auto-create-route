@@ -80,7 +80,7 @@ webpack({
     output: { path: path.join(__dirname, 'dist') },
     entry: path.join(__dirname, 'entry'),
     plugins: [
-        new VueAutoCreateRoute()
+        new VueAutoCreateRoute({ cwd: __dirname }, null, false)
     ]
 },
     (err, stats) => {

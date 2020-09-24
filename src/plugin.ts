@@ -1,7 +1,7 @@
 import vueAutoCreateRoute from './index'
 const pluginName = 'autoCreateVueRouteWebpackPlugin'
 
-export default class ConsoleLogOnBuildWebpackPlugin {
+export default class AutoCreateVueRouteWebpackPlugin {
     private options: any
     private isWatch: any
     private watchOptions: any

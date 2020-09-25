@@ -11,7 +11,7 @@ export class AutoCreateVueRouteWebpackPlugin {
         this.watchOptions = watchOptions
     }
     apply(compiler) {
-        compiler.hooks.beforeRun.tap(pluginName, compilation => {
+        compiler.hooks.beforeCompile.tap(pluginName, compilation => {
             vueAutoCreateRoute(this.options, this.watchOptions, this.isWatch)
         })
     }

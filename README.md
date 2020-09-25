@@ -62,9 +62,9 @@
 
 ``` js
  ...ts
- import vueAutoCreateRoute from 'vue-auto-create-route'
+ import AutoCreateVueRouteWebpackPlugin from 'vue-auto-create-route'
  // 在任意文件中执行
- vueAutoCreateRoute()
+ AutoCreateVueRouteWebpackPlugin()
      ...
 ```
 
@@ -72,7 +72,7 @@
 
 ``` ts
 import * as webpack from 'webpack'
-import VueAutoCreateRoute from 'vue-auto-create-route/build/plugin'
+import AutoCreateVueRouteWebpackPlugin from 'vue-auto-create-route/build/plugin'
 import * as path from 'path'
 
 webpack({
@@ -80,7 +80,7 @@ webpack({
     output: { path: path.join(__dirname, 'dist') },
     entry: path.join(__dirname, 'entry'),
     plugins: [
-        new VueAutoCreateRoute({ cwd: __dirname }, null, false)
+        new AutoCreateVueRouteWebpackPlugin({ cwd: __dirname }, null, false)
     ]
 },
     (err, stats) => {

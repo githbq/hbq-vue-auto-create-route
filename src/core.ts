@@ -3,7 +3,7 @@ import * as  fs from 'fs-extra'
 import * as  path from 'path'
 import { hyphen } from 'naming-style'
 import { js as beautify } from 'js-beautify'
-import * as  debounce from 'lodash.debounce'
+import * as  throttle from 'lodash.throttle'
 import template from './template'
 
 
@@ -141,4 +141,4 @@ const main = async ({ cwd, outputRouteFilePath }, hideConsole) => {
   // 5.完成
   !hideConsole && console.log('\n自动生成vue路由成功@', tempRouteFilePath, '\n')
 }
-export const run = debounce(main, 100) 
+export const run = throttle(main, 100, {leading: true, trailing: false}) 

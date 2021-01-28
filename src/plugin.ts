@@ -1,6 +1,6 @@
 import vueAutoCreateRoute from './index'
 const pluginName = 'autoCreateVueRouteWebpackPlugin'
-let first = true;
+let first = true
 export class AutoCreateVueRouteWebpackPlugin {
     private options: any
     private isWatch: any
@@ -12,8 +12,8 @@ export class AutoCreateVueRouteWebpackPlugin {
     }
     apply(compiler) {
         compiler.hooks.beforeCompile.tap(pluginName, compilation => {
-            if(first){
-                first = false;
+            if (first) {
+                first = false
                 vueAutoCreateRoute(this.options, this.watchOptions, this.isWatch)
             }
         })

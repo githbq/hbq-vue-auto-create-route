@@ -23,7 +23,6 @@
         "fs-extra": "^9.0.1",
         "globby": "^11.0.1",
         "js-beautify": "^1.13.0",
-        "lodash.debounce": "^4.0.8",
         "lodash.throttle": "^4.1.1",
         "naming-style": "^1.0.1",
         "tslib": "^2.0.1"

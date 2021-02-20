@@ -141,4 +141,4 @@ const main = async ({ cwd, outputRouteFilePath }, hideConsole) => {
   // 5.完成
   !hideConsole && console.log('\n自动生成vue路由成功@', tempRouteFilePath, '\n')
 }
-export const run = throttle(main, 100, {leading: true, trailing: false}) 
+export const run = throttle(main, 2000, {leading: true, trailing: false}) 

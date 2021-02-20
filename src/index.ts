@@ -1,7 +1,7 @@
 import * as  chokidar from 'chokidar'
 import * as path from 'path'
 import * as core from './core'
-const replacePathSplit = (str) => str.replace(/\\/g, '')
+const replacePathSplit = (str) => str.replace(/\\/g, '/')
 
 export default (options?, watchOptions?, isWatch = true) => {
   const newOptions = { ...options }

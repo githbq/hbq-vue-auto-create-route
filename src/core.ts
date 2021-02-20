@@ -26,7 +26,7 @@ async function getMetaInfos(cwd) {
   const dic = {}
   const list = []
   let maxLevel = 0
-  const metaInfos = await globby([path.join(pagesPath, `**/meta.json`), '!**/components/**/*'], { cwd })
+  const metaInfos = await globby([replacePathSplit(path.join(pagesPath, `**/meta.json`)), '!**/components/**/*'], { cwd })
   const promises = metaInfos.map(async n => {
     n = replacePathSplit(n)
     let asEntry = false

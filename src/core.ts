@@ -8,6 +8,7 @@ import template from './template'
 
 
 const defaultComponent = '@/components/main'
+const emptyComponent = '@/components/empty-container'
 const placeholders = {
   component: '##component##',
   meta: '##meta##',
@@ -70,7 +71,7 @@ function makeTree(data, level = 1, prefix = '') {
   return roots
 }
 
-function createRouteTemplate(tree) {
+function createRouteTemplate(tree, isChild = false) {
   let totalString = ''
   const templateStrs = []
   tree.forEach(node => {
@@ -91,14 +92,14 @@ function createRouteTemplate(tree) {
     replaceTasks.push({ key: placeholders.filePath, value: node.filePath })
     replaceTasks.push({ key: placeholders.name, value: node.routePath })
 
-    const componentPath = node.metaJSON.component || defaultComponent
+    const componentPath = isChild ? emptyComponent : node.metaJSON.component || defaultComponent
     replaceTasks.push({ key: placeholders.component, value: componentPath })
     delete node.metaJSON.componentPath
     // 父节点部分
     if (isParent || node.level === 1) {
       let children = ''
       if (hasChildren) {
-        children = createRouteTemplate(node.children)
+        children = createRouteTemplate(node.children, true)
       }
       replaceTasks.push({ key: placeholders.children, value: children })
 

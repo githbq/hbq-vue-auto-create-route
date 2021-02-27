@@ -1,6 +1,6 @@
 <template>
   <div>
     dashboard
-    <route-view />
+    <router-view />
   </div>
 </template>

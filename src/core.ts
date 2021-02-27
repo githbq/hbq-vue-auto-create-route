@@ -91,9 +91,7 @@ function createRouteTemplate(tree) {
     replaceTasks.push({ key: placeholders.meta, value: JSON.stringify(metaInfo) })
     replaceTasks.push({ key: placeholders.filePath, value: node.filePath })
     replaceTasks.push({ key: placeholders.name, value: node.routePath })
-    if (node.parent) {
-      console.log(node.parent)
-    }
+
     const componentPath = node.parent ? `@/${node.parent.filePath}` : (node.metaJSON.component || defaultComponent)
     replaceTasks.push({ key: placeholders.component, value: componentPath })
     delete node.metaJSON.componentPath

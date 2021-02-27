@@ -8,12 +8,18 @@ export default {
   children: [##children##],
 }
 `,
-  node:
+  leafNode:
     `{
-  path: '##path##',
-  name: '##name##',
-  meta: ##meta##,
-  component: () => import('@/##filePath##'),
+      path: '##path##',
+      component: () => import('##component##'),
+      meta: ##meta##,
+      children: [
+        {
+          path: '/',
+          name: '##name##', 
+          component: () => import('@/##filePath##'),
+        },
+      ],
 }
 `,
   singleParentNode:

@@ -8,7 +8,6 @@ import template from './template'
 
 
 const defaultComponent = '@/components/main'
-const emptyComponent = '@/components/empty-container'
 const placeholders = {
   component: '##component##',
   meta: '##meta##',
@@ -66,24 +65,25 @@ function makeTree(data, level = 1, prefix = '') {
   if (others.length > 0) {
     roots.forEach(n => {
       n.children = makeTree(others, level + 1, n.routePath)
+      n.children.forEach(m => m.parent = n)
     })
+  } else {
+    roots.forEach(n => n.isLeaf = true)
   }
   return roots
 }
 
-function createRouteTemplate(tree, isChild = false) {
+function createRouteTemplate(tree) {
   let totalString = ''
   const templateStrs = []
   tree.forEach(node => {
-    let isParent = false
-    let templateStr = template.node
-    const hasChildren = node.children && node.children.length > 0
+    let templateStr = template.leafNode
     const replaceTasks = []
-    if (node.level === 1 && !hasChildren) {
+    if (node.level === 1 && node.isLeaf) {
       templateStr = template.singleParentNode
-    } else if (hasChildren) {
+    } else if (!node.isLeaf) {
       templateStr = node.asEntry ? template.parentWithEntryNode : template.parentNode
-      isParent = true
+
     }
     // 通用替换部分
     const metaInfo = node.metaJSON
@@ -91,15 +91,17 @@ function createRouteTemplate(tree, isChild = false) {
     replaceTasks.push({ key: placeholders.meta, value: JSON.stringify(metaInfo) })
     replaceTasks.push({ key: placeholders.filePath, value: node.filePath })
     replaceTasks.push({ key: placeholders.name, value: node.routePath })
-
-    const componentPath = isChild ? emptyComponent : node.metaJSON.component || defaultComponent
+    if (node.parent) {
+      console.log(node.parent)
+    }
+    const componentPath = node.parent ? `@/${node.parent.filePath}` : (node.metaJSON.component || defaultComponent)
     replaceTasks.push({ key: placeholders.component, value: componentPath })
     delete node.metaJSON.componentPath
     // 父节点部分
-    if (isParent || node.level === 1) {
+    if (!node.isLeaf || node.level === 1) {
       let children = ''
-      if (hasChildren) {
-        children = createRouteTemplate(node.children, true)
+      if (!node.isLeaf) {
+        children = createRouteTemplate(node.children)
       }
       replaceTasks.push({ key: placeholders.children, value: children })
 
@@ -110,7 +112,7 @@ function createRouteTemplate(tree, isChild = false) {
       replaceTasks.push({ key: placeholders.path, value: routePath })
     }
     // 子节点部分
-    if (!isParent) {
+    if (node.isLeaf) {
       const routePath = node.routePath.split('/').pop()
       replaceTasks.push({ key: placeholders.path, value: routePath })
     }
@@ -142,4 +144,4 @@ const main = async ({ cwd, outputRouteFilePath }, hideConsole) => {
   // 5.完成
   !hideConsole && console.log('\n自动生成vue路由成功@', tempRouteFilePath, '\n')
 }
-export const run = throttle(main, 2000, {leading: true, trailing: false}) 
+export const run = throttle(main, 2000, { leading: true, trailing: false }) 

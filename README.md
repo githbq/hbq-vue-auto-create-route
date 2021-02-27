@@ -2,6 +2,8 @@
 
 > 智能识别 `vue` 项目页面结构，自动生成 vue routes 到 `@/router/temp.router.js`
 > 根据 `@/src/pages/**/meta.json` 自动生成 vue routes
+
+
 > 2021-02-27 更新，支持多层面路径父组件模块自动继承嵌套，详见 `src/examples` 示例，`npm run examples` 运行查看效果
 
 特点:

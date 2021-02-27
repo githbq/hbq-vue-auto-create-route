@@ -16,7 +16,7 @@
         "p": "npm run tsc && npm publish",
         "lint": "tslint \"src/**/*.ts\" --fix",
         "precommit": "npm run lint",
-        "examples": "ts-node './src/examples'"
+        "examples": "ts-node ./src/examples"
     },
     "dependencies": {
         "chokidar": "^3.4.2",
@@ -44,10 +44,14 @@
         "webpackplugin"
     ],
     "husky": {
-        "hooks": {"pre-commit": "npm run lint"}
+        "hooks": {
+            "pre-commit": "npm run lint"
+        }
     },
     "author": "hubiqing",
     "repository": "https://github.com/githbq/hbq-vue-auto-create-route.git",
-    "engines": {"node": ">=10"},
+    "engines": {
+        "node": ">=10"
+    },
     "license": "MIT"
 }

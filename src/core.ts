@@ -15,6 +15,7 @@ const placeholders = {
   path: '##path##',
   name: '##name##',
   filePath: '##filePath##',
+  redirect: '##redirect##',
 }
 
 function replacePathSplit(dir) {
@@ -73,6 +74,16 @@ function makeTree(data, level = 1, prefix = '') {
   return roots
 }
 
+function optionsToString(options) {
+  options = options || {}
+  let result = JSON.stringify(options)
+  console.log('result', result)
+  result = result.replace(/^{/, '')
+  result = result.replace(/}$/, '')
+  result = result ? `${result},` : ''
+  return result
+}
+
 function createRouteTemplate(tree) {
   let totalString = ''
   const templateStrs = []
@@ -91,7 +102,8 @@ function createRouteTemplate(tree) {
     replaceTasks.push({ key: placeholders.meta, value: JSON.stringify(metaInfo) })
     replaceTasks.push({ key: placeholders.filePath, value: node.filePath })
     replaceTasks.push({ key: placeholders.name, value: node.routePath })
-
+    replaceTasks.push({ key: placeholders.redirect, value: optionsToString({ redirect: metaInfo.redirect }) })
+    delete metaInfo.redirect
     const componentPath = node.metaJSON.component || (node.parent ? `@/${node.parent.filePath}` : defaultComponent)
     replaceTasks.push({ key: placeholders.component, value: componentPath })
     delete node.metaJSON.componentPath

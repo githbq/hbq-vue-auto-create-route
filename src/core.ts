@@ -92,7 +92,7 @@ function createRouteTemplate(tree) {
     replaceTasks.push({ key: placeholders.filePath, value: node.filePath })
     replaceTasks.push({ key: placeholders.name, value: node.routePath })
 
-    const componentPath = node.parent ? `@/${node.parent.filePath}` : (node.metaJSON.component || defaultComponent)
+    const componentPath = node.metaJSON.component || (node.parent ? `@/${node.parent.filePath}` : defaultComponent)
     replaceTasks.push({ key: placeholders.component, value: componentPath })
     delete node.metaJSON.componentPath
     // 父节点部分

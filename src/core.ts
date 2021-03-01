@@ -153,6 +153,6 @@ const main = async (options, hideConsole) => {
     beautify(`export default [${finalStr}]`, { indent_size: 2, space_in_empty_paren: true }),
   )
   // 5.完成
-  !hideConsole && console.log('\n自动生成vue路由成功@', tempRouteFilePath, '\n')
+  hideConsole===false && console.log('\n自动生成vue路由成功@', tempRouteFilePath, '\n')
 }
 export const run = throttle(main, 500, { leading: false, trailing: true }) 

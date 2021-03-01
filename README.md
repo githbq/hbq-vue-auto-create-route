@@ -4,7 +4,7 @@
 > 根据 `@/src/pages/**/meta.json` 自动生成 vue routes
 
 
-> 2021-02-27 更新，支持多层面路径父组件模块自动继承嵌套，详见 `src/examples` 示例，`npm run examples` 运行查看效果
+> 2021-02-27 更新，支持多层面路径父组件模块自动继承嵌套，详见 `src/examples` 示例，`npm run examples` 运行查看效果 (需要在src/examples/下装包)
 
 特点:
 

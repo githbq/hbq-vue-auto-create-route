@@ -77,7 +77,6 @@ function makeTree(data, level = 1, prefix = '') {
 function optionsToString(options) {
   options = options || {}
   let result = JSON.stringify(options)
-  console.log('result', result)
   result = result.replace(/^{/, '')
   result = result.replace(/}$/, '')
   result = result ? `${result},` : ''

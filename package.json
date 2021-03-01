@@ -14,7 +14,7 @@
         "tsc": "npm run clear && tsc",
         "tsc:w": "npm run tsc -- -w",
         "p": "npm run tsc && npm publish",
-        "lint": "tslint ./src/**/*.ts -e ./src/examples/** --fix",
+        "lint": "tslint ./src/**/*.ts -e ./src/examples --fix",
         "precommit": "npm run lint",
         "examples": "npm run tsc && cd src/examples && npm start"
     },

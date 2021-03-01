@@ -1,0 +1,14 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "rules": {},
+    "extends": [ 
+    ],
+    "ignorePatterns": [
+        "src/examples",
+        "**/temp",
+        "**/temp.*"
+    ]
+}

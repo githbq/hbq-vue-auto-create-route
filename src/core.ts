@@ -138,7 +138,7 @@ function createRouteTemplate(tree) {
 
 const main = async ({ cwd, outputRouteFilePath, rootLayoutComponent }, hideConsole) => {
   defaultLayoutComponent = rootLayoutComponent || defaultLayoutComponent
-  let newCwd = replacePathSplit(cwd || path.resolve('.'))
+  const newCwd = replacePathSplit(cwd || path.resolve('.'))
   // 1.获取所有页面元信息
   const metaInfos = await getMetaInfos(newCwd)
   // 2.转换成树形

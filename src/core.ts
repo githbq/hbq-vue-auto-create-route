@@ -18,27 +18,28 @@ const placeholders = {
   redirect: '##redirect##',
 }
 
-function replacePathSplit(dir) {
-  return (dir || '').replace(/\\/g, '/')
-}
+const replacePathSplitForCommon = (str) => str.replace(/\\/g, '/')
+const replacePathSplit = (str) => replacePathSplitForCommon(str).replace(/\//g, path.sep)
 
 async function getMetaInfos(cwd) {
   const pagesPath = 'src/pages'
   const dic = {}
   const list = []
   let maxLevel = 0
-  const metaInfos = await globby([replacePathSplit(path.join(pagesPath, `**/meta.json`)), '!**/components/**/*'], { cwd })
+  const metaInfos = await globby([replacePathSplitForCommon(path.join(pagesPath, `**/meta.json`))], { cwd })
   const promises = metaInfos.map(async n => {
     n = replacePathSplit(n)
     let asEntry = false
-    const entryFilePath = replacePathSplit(path.resolve(path.dirname(n), 'index.vue'))
+    const entryFilePath = replacePathSplit(path.join(cwd, path.dirname(n), 'index.vue'))
+
     asEntry = await fs.pathExists(entryFilePath)
-    const filePath = replacePathSplit(path.dirname(n)).replace(/^src\//, '')
+
+    const filePath = replacePathSplit(path.dirname(n)).replace(/^src(\/|\\)/, '')
     let tempPath = replacePathSplit(path.relative(pagesPath, n))
 
-    tempPath = replacePathSplit(path.dirname(tempPath))
+    tempPath = replacePathSplitForCommon(path.dirname(tempPath))
     const routePath = tempPath === '.' ? '/' : tempPath.split('/').map(m => hyphen(m)).join('/')
-    const level = routePath.split('/').length
+    const level = routePath.length == 1 ? 1 : routePath.split('/').length
     if (level > maxLevel) {
       maxLevel = level
     }
@@ -46,7 +47,8 @@ async function getMetaInfos(cwd) {
     const metaJSONPath = path.resolve(cwd, n)
     const metaJSON = await fs.readJSON(metaJSONPath)
 
-    dic[routePath] = { asEntry, filePath, routePath, metaJSON: metaJSON, level: routePath.split('/').length }
+    dic[routePath] = { asEntry, filePath, routePath, metaJSON: metaJSON, level }
+
     list.push(dic[routePath])
   })
   await Promise.all(promises)
@@ -57,20 +59,23 @@ async function getMetaInfos(cwd) {
   })
   list.sort((a, b) => a.metaJSON.index - b.metaJSON.index)
   list.forEach(n => delete n.metaJSON.index)
+  fs.outputFileSync('./temp.list.json', JSON.stringify(list))
   return { dic, list, maxLevel }
 }
 
 function makeTree(data, level = 1, prefix = '') {
   const roots = data.filter(n => n.level === level && n.metaJSON.hidden !== true && n.routePath.indexOf(prefix) === 0)
   const others = data.filter(n => n.level > level)
+
+  roots.filter(n => !data.some(m => m.level > n.level && m.routePath.indexOf(n.routePath) === 0)).forEach(n => n.isLeaf = true)
+  
   if (others.length > 0) {
     roots.forEach(n => {
       n.children = makeTree(others, level + 1, n.routePath)
       n.children.forEach(m => m.parent = n)
     })
-  } else {
-    roots.forEach(n => n.isLeaf = true)
   }
+
   return roots
 }
 
@@ -88,10 +93,11 @@ function createRouteTemplate(tree) {
   const templateStrs = []
   tree.forEach(node => {
     let templateStr = template.leafNode
-    const replaceTasks = []
+    const replaceTasks = [] 
+
     if (node.level === 1 && node.isLeaf) {
       templateStr = template.singleParentNode
-    } else if (!node.isLeaf) {
+    } else if (!node.isLeaf) { 
       templateStr = node.asEntry ? template.parentWithEntryNode : template.parentNode
 
     }
@@ -99,14 +105,18 @@ function createRouteTemplate(tree) {
     const metaInfo = node.metaJSON
 
     replaceTasks.push({ key: placeholders.meta, value: JSON.stringify(metaInfo) })
-    replaceTasks.push({ key: placeholders.filePath, value: node.filePath })
+
+    replaceTasks.push({ key: placeholders.filePath, value: replacePathSplitForCommon(node.filePath) })
+
     replaceTasks.push({ key: placeholders.name, value: node.routePath })
 
-    replaceTasks.push({ key: placeholders.redirect, value: optionsToString({ redirect: metaInfo.redirect?hyphen(metaInfo.redirect):undefined }) })
+    replaceTasks.push({ key: placeholders.redirect, value: optionsToString({ redirect: metaInfo.redirect ? hyphen(metaInfo.redirect) : undefined }) })
     delete metaInfo.redirect
 
     const componentPath = node.metaJSON.layoutComponent || (node.parent ? `@/${node.parent.filePath}` : defaultLayoutComponent)
-    replaceTasks.push({ key: placeholders.component, value: componentPath })
+
+    replaceTasks.push({ key: placeholders.component, value: replacePathSplitForCommon(componentPath) })
+
     delete node.metaJSON.layoutComponent
     // 父节点部分
     if (!node.isLeaf || node.level === 1) {
@@ -120,7 +130,7 @@ function createRouteTemplate(tree) {
       if (node.level === 1) {
         routePath = `/${node.routePath}`
       }
-      replaceTasks.push({ key: placeholders.path, value: routePath })
+      replaceTasks.push({ key: placeholders.path, value: routePath.replace(/\/+/g, '/') })
     }
     // 子节点部分
     if (node.isLeaf) {
@@ -142,6 +152,7 @@ const main = async (options, hideConsole) => {
   const { cwd, outputRouteFilePath, rootLayoutComponent } = options || {}
   defaultLayoutComponent = rootLayoutComponent || defaultLayoutComponent
   const newCwd = replacePathSplit(cwd || path.resolve('.'))
+ 
   // 1.获取所有页面元信息
   const metaInfos = await getMetaInfos(newCwd)
   // 2.转换成树形
@@ -150,6 +161,8 @@ const main = async (options, hideConsole) => {
   const finalStr = createRouteTemplate(metaTree)
   // 4.写入文件
   const tempRouteFilePath = outputRouteFilePath || path.join(newCwd, 'src', 'router', 'temp.router.js')
+  
+  fs.removeSync(tempRouteFilePath) 
   await fs.outputFile(
     tempRouteFilePath,
     beautify(`export default [${finalStr}]`, { indent_size: 2, space_in_empty_paren: true }),

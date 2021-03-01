@@ -2,7 +2,7 @@
 export default {
   parentNode:
     `{
-  path: '##path##',
+  path: '##path##',##redirect##
   component: () => import('##component##'),
   meta: ##meta##,
   children: [##children##],
@@ -15,8 +15,7 @@ export default {
       meta: ##meta##, 
       children: [
         {
-          path: '/',
-          ##redirect##
+          path: '/',##redirect##
           name: '##name##', 
           component: () => import('@/##filePath##'),
         },
@@ -25,13 +24,12 @@ export default {
 `,
   singleParentNode:
     `{
-  path: '##path##', 
+  path: '##path##',
   component: () => import('##component##'),
   meta: ##meta##,
   children: [
     {
-      path: '/',
-      ##redirect##
+      path: '/',##redirect##
       name: '##name##', 
       component: () => import('@/##filePath##'),
     },
@@ -45,8 +43,7 @@ export default {
   meta: ##meta##, 
   children: [
     {
-      path: '/',
-      ##redirect##
+      path: '/',##redirect##
       name: '##name##', 
       component: () => import('@/##filePath##'),
     },

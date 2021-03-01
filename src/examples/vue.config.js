@@ -8,7 +8,7 @@ module.exports = {
     },
     configureWebpack: {
         plugins: [
-            new AutoCreateVueRouteWebpackPlugin()
-        ]
+            new AutoCreateVueRouteWebpackPlugin({cwd:__dirname})
+        ] 
     }
 } 

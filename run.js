@@ -6,4 +6,4 @@ const main = require('./src/index.ts').default
 //https://tslang.cn/docs/handbook/compiler-options.html+
 
 
-main({ cwd: './src/examples' },null,true)
+main({ cwd: './src/examples' },null,false)

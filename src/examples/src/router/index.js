@@ -7,10 +7,6 @@ Vue.use(VueRouter)
 
 export default new VueRouter({
     routes: [
-        {
-            path: '/',
-            redirect: '/dashboard'
-        },
         ...routes
     ],
     mode: 'history'

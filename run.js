@@ -1,6 +1,9 @@
- require('ts-node/register')
+require('ts-node/register')
 
- require('./src/index.ts')
-     //tsconfig 帮助文档地址
-     //https://zhongsp.gitbooks.io/typescript-handbook/content/doc/handbook/tsconfig.json.html
-     //https://tslang.cn/docs/handbook/compiler-options.html
+const main = require('./src/index.ts').default
+//tsconfig 帮助文档地址
+//https://zhongsp.gitbooks.io/typescript-handbook/content/doc/handbook/tsconfig.json.html
+//https://tslang.cn/docs/handbook/compiler-options.html+
+
+
+main({ cwd: './src/examples' },null,true)

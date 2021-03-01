@@ -75,7 +75,10 @@ webpack({
     output: { path: path.join(__dirname, 'dist') },
     entry: path.join(__dirname, 'entry'),
     plugins: [
-        new AutoCreateVueRouteWebpackPlugin({ cwd: __dirname }, null, false)
+        // 第一个参数 cwd, outputRouteFilePath, rootLayoutComponent
+        // 第二个参数监听选项 chokidar watchOptions
+        // 第三个参数代理是否watch实时生成
+        new AutoCreateVueRouteWebpackPlugin({ cwd: __dirname }, null, true) 
     ]
 },
     (err, stats) => {

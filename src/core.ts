@@ -136,8 +136,8 @@ function createRouteTemplate(tree) {
 }
 
 
-const main = async ({ cwd, outputRouteFilePath, layoutComponent }, hideConsole) => {
-  defaultLayoutComponent = layoutComponent || defaultLayoutComponent
+const main = async ({ cwd, outputRouteFilePath, rootLayoutComponent }, hideConsole) => {
+  defaultLayoutComponent = rootLayoutComponent || defaultLayoutComponent
   let newCwd = replacePathSplit(cwd || path.resolve('.'))
   // 1.获取所有页面元信息
   const metaInfos = await getMetaInfos(newCwd)
@@ -154,4 +154,4 @@ const main = async ({ cwd, outputRouteFilePath, layoutComponent }, hideConsole) 
   // 5.完成
   !hideConsole && console.log('\n自动生成vue路由成功@', tempRouteFilePath, '\n')
 }
-export const run = throttle(main, 2000, { leading: true, trailing: false }) 
+export const run = throttle(main, 500, { leading: false, trailing: true }) 

@@ -59,7 +59,6 @@ async function getMetaInfos(cwd) {
   })
   list.sort((a, b) => a.metaJSON.index - b.metaJSON.index)
   list.forEach(n => delete n.metaJSON.index)
-  fs.outputFileSync('./temp.list.json', JSON.stringify(list))
   return { dic, list, maxLevel }
 }
 

@@ -41,7 +41,7 @@
         "icon": "el-icon-s-help"
     },
     "index": 1, // 内置属性，非必须，用于干预页面路由生成的顺序
-    "component": "@/components/[other-layout-component]", //内置属性，非必须，手动改变页面对应的组件，通常不需要配置
+    "layoutComponent": "@/components/[other-layout-component]", //内置属性，非必须，手动改变页面对应的容器组件，通常不需要配置
     "access": [ //自定义 示例，用于页面权限定义
         "ADMIN",
         "USER VISITOR",

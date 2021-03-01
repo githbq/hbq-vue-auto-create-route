@@ -7,7 +7,7 @@ import * as  throttle from 'lodash.throttle'
 import template from './template'
 
 
-const defaultComponent = '@/components/main'
+let defaultLayoutComponent = '@/components/main'
 const placeholders = {
   component: '##component##',
   meta: '##meta##',
@@ -103,9 +103,9 @@ function createRouteTemplate(tree) {
     replaceTasks.push({ key: placeholders.name, value: node.routePath })
     replaceTasks.push({ key: placeholders.redirect, value: optionsToString({ redirect: metaInfo.redirect }) })
     delete metaInfo.redirect
-    const componentPath = node.metaJSON.component || (node.parent ? `@/${node.parent.filePath}` : defaultComponent)
+    const componentPath = node.metaJSON.layoutComponent || (node.parent ? `@/${node.parent.filePath}` : defaultLayoutComponent)
     replaceTasks.push({ key: placeholders.component, value: componentPath })
-    delete node.metaJSON.componentPath
+    delete node.metaJSON.layoutComponent
     // 父节点部分
     if (!node.isLeaf || node.level === 1) {
       let children = ''
@@ -136,7 +136,8 @@ function createRouteTemplate(tree) {
 }
 
 
-const main = async ({ cwd, outputRouteFilePath }, hideConsole) => {
+const main = async ({ cwd, outputRouteFilePath, layoutComponent }, hideConsole) => {
+  defaultLayoutComponent = layoutComponent || defaultLayoutComponent
   let newCwd = replacePathSplit(cwd || path.resolve('.'))
   // 1.获取所有页面元信息
   const metaInfos = await getMetaInfos(newCwd)

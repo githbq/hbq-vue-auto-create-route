@@ -37,7 +37,7 @@ async function getMetaInfos(cwd) {
     let tempPath = replacePathSplit(path.relative(pagesPath, n))
 
     tempPath = replacePathSplit(path.dirname(tempPath))
-    const routePath = tempPath.split('/').map(m => hyphen(m)).join('/')
+    const routePath = tempPath === '.' ? '/' : tempPath.split('/').map(m => hyphen(m)).join('/')
     const level = routePath.split('/').length
     if (level > maxLevel) {
       maxLevel = level
@@ -101,8 +101,10 @@ function createRouteTemplate(tree) {
     replaceTasks.push({ key: placeholders.meta, value: JSON.stringify(metaInfo) })
     replaceTasks.push({ key: placeholders.filePath, value: node.filePath })
     replaceTasks.push({ key: placeholders.name, value: node.routePath })
-    replaceTasks.push({ key: placeholders.redirect, value: optionsToString({ redirect: metaInfo.redirect }) })
-    delete metaInfo.redirect
+    if (metaInfo.redirect) {
+      replaceTasks.push({ key: placeholders.redirect, value: optionsToString({ redirect: hyphen(metaInfo.redirect) }) })
+      delete metaInfo.redirect
+    }
     const componentPath = node.metaJSON.layoutComponent || (node.parent ? `@/${node.parent.filePath}` : defaultLayoutComponent)
     replaceTasks.push({ key: placeholders.component, value: componentPath })
     delete node.metaJSON.layoutComponent
@@ -153,6 +155,6 @@ const main = async (options, hideConsole) => {
     beautify(`export default [${finalStr}]`, { indent_size: 2, space_in_empty_paren: true }),
   )
   // 5.完成
-  hideConsole===false && console.log('\n自动生成vue路由成功@', tempRouteFilePath, '\n')
+  hideConsole === false && console.log('\n自动生成vue路由成功@', tempRouteFilePath, '\n')
 }
 export const run = throttle(main, 500, { leading: false, trailing: true }) 

@@ -101,10 +101,10 @@ function createRouteTemplate(tree) {
     replaceTasks.push({ key: placeholders.meta, value: JSON.stringify(metaInfo) })
     replaceTasks.push({ key: placeholders.filePath, value: node.filePath })
     replaceTasks.push({ key: placeholders.name, value: node.routePath })
-    if (metaInfo.redirect) {
-      replaceTasks.push({ key: placeholders.redirect, value: optionsToString({ redirect: hyphen(metaInfo.redirect) }) })
-      delete metaInfo.redirect
-    }
+
+    replaceTasks.push({ key: placeholders.redirect, value: optionsToString({ redirect: metaInfo.redirect?hyphen(metaInfo.redirect):'' }) })
+    delete metaInfo.redirect
+
     const componentPath = node.metaJSON.layoutComponent || (node.parent ? `@/${node.parent.filePath}` : defaultLayoutComponent)
     replaceTasks.push({ key: placeholders.component, value: componentPath })
     delete node.metaJSON.layoutComponent

@@ -1,6 +1,6 @@
 {
     "name": "vue-auto-create-route",
-    "version": "1.3.11",
+    "version": "1.3.12",
     "description": "hbq-vue-auto-create-route",
     "publishConfig": {
         "registry": "https://registry.npmjs.org"
@@ -16,8 +16,7 @@
         "p": "npm run tsc && npm publish",
         "lint": "eslint --ext .ts src --fix",
         "install:examples": "cd src/examples && npm install",
-        "examples": "npm run tsc && cd src/examples && npm start",
-        "postinstall": "husky install"
+        "examples": "npm run tsc && cd src/examples && npm start"
     },
     "dependencies": {
         "chokidar": "^3.4.2",

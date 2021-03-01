@@ -35,7 +35,7 @@
 
 ``` js
 {
-    "redirect":"default-child", //内置属性，非必须，父页面可以设置redirect定义默认子页面
+    "redirect":"default-child", //内置属性，非必须，父页面可以设置redirect定义默认子页面     -
     "menu": { //自定义 示例，如果不需要展示主界面菜单上，则不配置 menu 项
         "title": "看板",
         "icon": "el-icon-s-help"

@@ -15,7 +15,8 @@
         "tsc:w": "npm run tsc -- -w",
         "p": "npm run tsc && npm publish",
         "lint": "eslint --ext .ts src --fix",
-        "examples": "npm run tsc && cd src/examples && npm start" 
+        "examples": "npm run tsc && cd src/examples && npm start",
+        "postinstall": "husky install"
     },
     "dependencies": {
         "chokidar": "^3.4.2",

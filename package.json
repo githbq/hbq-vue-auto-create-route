@@ -16,7 +16,7 @@
         "p": "npm run tsc && npm publish",
         "lint": "eslint --ext .ts src --fix",
         "examples": "npm run tsc && cd src/examples && npm start",
-        "precommit":"npm run lint"
+        "pre-commit":"npm run lint"
     },
     "dependencies": {
         "chokidar": "^3.4.2",

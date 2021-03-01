@@ -102,7 +102,7 @@ function createRouteTemplate(tree) {
     replaceTasks.push({ key: placeholders.filePath, value: node.filePath })
     replaceTasks.push({ key: placeholders.name, value: node.routePath })
 
-    replaceTasks.push({ key: placeholders.redirect, value: optionsToString({ redirect: metaInfo.redirect?hyphen(metaInfo.redirect):'' }) })
+    replaceTasks.push({ key: placeholders.redirect, value: optionsToString({ redirect: metaInfo.redirect?hyphen(metaInfo.redirect):undefined }) })
     delete metaInfo.redirect
 
     const componentPath = node.metaJSON.layoutComponent || (node.parent ? `@/${node.parent.filePath}` : defaultLayoutComponent)

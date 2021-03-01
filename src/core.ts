@@ -136,7 +136,8 @@ function createRouteTemplate(tree) {
 }
 
 
-const main = async ({ cwd, outputRouteFilePath, rootLayoutComponent }, hideConsole) => {
+const main = async (options, hideConsole) => {
+  const { cwd, outputRouteFilePath, rootLayoutComponent } = options || {}
   defaultLayoutComponent = rootLayoutComponent || defaultLayoutComponent
   const newCwd = replacePathSplit(cwd || path.resolve('.'))
   // 1.获取所有页面元信息
@@ -146,7 +147,7 @@ const main = async ({ cwd, outputRouteFilePath, rootLayoutComponent }, hideConso
   // 3.生成路由JS字符串
   const finalStr = createRouteTemplate(metaTree)
   // 4.写入文件
-  const tempRouteFilePath = outputRouteFilePath || path.join(cwd, 'src', 'router', 'temp.router.js')
+  const tempRouteFilePath = outputRouteFilePath || path.join(newCwd, 'src', 'router', 'temp.router.js')
   await fs.outputFile(
     tempRouteFilePath,
     beautify(`export default [${finalStr}]`, { indent_size: 2, space_in_empty_paren: true }),

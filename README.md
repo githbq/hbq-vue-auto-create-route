@@ -75,10 +75,11 @@ webpack({
     output: { path: path.join(__dirname, 'dist') },
     entry: path.join(__dirname, 'entry'),
     plugins: [
-        // 第一个参数 cwd, outputRouteFilePath, rootLayoutComponent
-        // 第二个参数监听选项 chokidar watchOptions
-        // 第三个参数代理是否watch实时生成
-        new AutoCreateVueRouteWebpackPlugin({ cwd: __dirname }, null, true) 
+        // 可省略，第一个参数 cwd, outputRouteFilePath, rootLayoutComponent
+        // 可省略，第二个参数监听选项 chokidar watchOptions
+        // 可省略，第三个参数代表是否watch实时生成，process.env.NODE_ENV为production时强制不监听
+        // new AutoCreateVueRouteWebpackPlugin({ cwd: __dirname }, null, true) 
+        new AutoCreateVueRouteWebpackPlugin() 
     ]
 },
     (err, stats) => {

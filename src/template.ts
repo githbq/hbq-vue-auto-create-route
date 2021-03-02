@@ -5,7 +5,16 @@ export default {
   path: '##path##',##redirect##
   component: () => import('##component##'),
   meta: ##meta##,
-  children: [##children##],
+  children: [
+    {
+      path: '/',##redirect##
+      name: '##name##', 
+      component:{
+        render(createElement){return createElement('router-view')}
+      },
+    },
+    ##children##
+  ],
 }
 `,
   leafNode:
@@ -50,5 +59,4 @@ export default {
     ##children##
   ],
 }
-`,
-}
+`}

@@ -1,7 +1,7 @@
 { 
     "redirect":"son2",
     "menu": {
-        "title": "home",
+        "title": "parent",
         "icon": "el-icon-s-help"
     },
     "yourCustom": "用户可以自定义任何属性",

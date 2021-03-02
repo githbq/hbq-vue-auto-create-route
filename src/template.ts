@@ -4,8 +4,7 @@ export default {
     `
 {
   path: '##path##',##redirect##
-  component: ##layoutComponent##,
-  meta: ##meta##,
+  component: ##layoutComponent##, 
   children: [
     {
       path: '##customPath##' || '/',##redirect##
@@ -21,8 +20,7 @@ export default {
     `
 {
       path: '##path##',
-      component: ##layoutComponent##,
-      meta: ##meta##, 
+      component: ##layoutComponent##, 
       children: [
         {
           path: '##customPath##' || '/',##redirect##
@@ -37,8 +35,7 @@ export default {
     `
 {
   path: '##path##',
-  component: ##layoutComponent##,
-  meta: ##meta##,
+  component: ##layoutComponent##, 
   children: [
     {
       path: '##customPath##' || '/',##redirect##
@@ -53,8 +50,7 @@ export default {
     `
 {
   path: '##path##',
-  component: ##layoutComponent##,
-  meta: ##meta##, 
+  component: ##layoutComponent##, 
   children: [
     {
       path: '##customPath##' || '/',##redirect##

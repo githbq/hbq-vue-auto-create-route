@@ -142,7 +142,7 @@ function createRouteTemplate(tree) {
 
     replaceTasks.push({ key: placeholders.layoutComponent, value: layoutComponentTemplate })
 
-    replaceTasks.push({ key: placeholders.customPath, value: (metaInfo.path || '').replace(/^\/+/,'') })
+    replaceTasks.push({ key: placeholders.customPath, value: (metaInfo.path || '').replace(/^\/+/, '') })
 
     delete metaInfo.path
 
@@ -176,6 +176,18 @@ function createRouteTemplate(tree) {
   return totalString
 }
 
+function createMetaJSONTree(tree) {
+  const metaJSONTree = []
+  tree.forEach(node => {
+    metaJSONTree.push(node.metaJSON)
+    if (node.children && node.children.length > 0) {
+      node.metaJSON.children = node.metaJSON.children || []
+      node.metaJSON.children = node.metaJSON.children.concat(createMetaJSONTree(node.children))
+    }
+  })
+  return metaJSONTree
+}
+
 
 const main = async (options, hideConsole) => {
   const { cwd, outputRouteFilePath, rootLayoutComponent } = options || {}
@@ -188,13 +200,20 @@ const main = async (options, hideConsole) => {
   const metaTree = makeTree(metaInfos.list)
   // 3.生成路由JS字符串
   const finalStr = createRouteTemplate(metaTree)
+  // 4.生成metaJSON字符串
+  const metaJSONTreeStr = JSON.stringify(createMetaJSONTree(metaTree))
+
   // 4.写入文件
   const tempRouteFilePath = outputRouteFilePath || path.join(newCwd, 'src', 'router', 'temp.router.js')
 
   fs.removeSync(tempRouteFilePath)
   await fs.outputFile(
     tempRouteFilePath,
-    beautify(`export default [${finalStr}]`, jsPrettyConfig),
+    beautify(`
+    export default [${finalStr}];
+    
+    export const metaJSONTree = ${metaJSONTreeStr};
+    `, jsPrettyConfig),
   )
   // 5.完成
   hideConsole === false && console.log('\n自动生成vue路由成功@', tempRouteFilePath, '\n')

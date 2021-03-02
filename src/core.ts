@@ -179,10 +179,11 @@ function createRouteTemplate(tree) {
 function createMetaJSONTree(tree) {
   const metaJSONTree = []
   tree.forEach(node => {
-    metaJSONTree.push(node.metaJSON)
+    const newNode = { path: `/${node.routePath.replace(/^\//, '')}`, meta: node.metaJSON, children: undefined }
+    metaJSONTree.push(newNode)
     if (node.children && node.children.length > 0) {
-      node.metaJSON.children = node.metaJSON.children || []
-      node.metaJSON.children = node.metaJSON.children.concat(createMetaJSONTree(node.children))
+      newNode.children = newNode.children || []
+      newNode.children = newNode.children.concat(createMetaJSONTree(node.children))
     }
   })
   return metaJSONTree

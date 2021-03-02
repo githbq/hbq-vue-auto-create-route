@@ -128,7 +128,7 @@ function createRouteTemplate(tree) {
 
     replaceTasks.push({ key: placeholders.meta, value: JSON.stringify(metaInfo) })
 
-    replaceTasks.push({ key: placeholders.name, value: node.routePath })
+    replaceTasks.push({ key: placeholders.name, value: `/${node.routePath.replace(/^\//,'')}` })
     replaceTasks.push({ key: placeholders.component, value: node.component })
 
     replaceTasks.push({ key: placeholders.redirect, value: optionsToString({ redirect: metaInfo.redirect ? metaInfo.redirect.split('/').map(n => !n ? n : hyphen(n)).join('/') : undefined }) })

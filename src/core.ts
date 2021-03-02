@@ -142,7 +142,7 @@ function createRouteTemplate(tree) {
 
     replaceTasks.push({ key: placeholders.layoutComponent, value: layoutComponentTemplate })
 
-    replaceTasks.push({ key: placeholders.customPath, value: (metaInfo.path || '').replace(/^\/+/, '') })
+    replaceTasks.push({ key: placeholders.customPath, value: (metaInfo.path || '').replace(/^\/+/, '') || '/' })
 
     delete metaInfo.path
 
@@ -211,7 +211,7 @@ const main = async (options, hideConsole) => {
     tempRouteFilePath,
     beautify(`
     export default [${finalStr}];
-    
+
     export const metaJSONTree = ${metaJSONTreeStr};
     `, jsPrettyConfig),
   )

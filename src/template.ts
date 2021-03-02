@@ -7,7 +7,7 @@ export default {
   component: ##layoutComponent##, 
   children: [
     {
-      path: '##customPath##' || '/',##redirect##
+      path: '##customPath##',##redirect##
       name: '##name##', 
       component: ##component##,
       meta: ##meta##,
@@ -23,7 +23,7 @@ export default {
       component: ##layoutComponent##, 
       children: [
         {
-          path: '##customPath##' || '/',##redirect##
+          path: '##customPath##',##redirect##
           name: '##name##', 
           component: ##component##,
           meta: ##meta##,
@@ -38,7 +38,7 @@ export default {
   component: ##layoutComponent##, 
   children: [
     {
-      path: '##customPath##' || '/',##redirect##
+      path: '##customPath##',##redirect##
       name: '##name##', 
       component: ##component##,
       meta: ##meta##,
@@ -53,7 +53,7 @@ export default {
   component: ##layoutComponent##, 
   children: [
     {
-      path: '##customPath##' || '/',##redirect##
+      path: '##customPath##',##redirect##
       name: '##name##', 
       component: ##component##,
       meta: ##meta##,

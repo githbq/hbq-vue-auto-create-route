@@ -1,6 +1,6 @@
 {
     "name": "vue-auto-create-route",
-    "version": "1.3.23",
+    "version": "1.3.24",
     "description": "hbq-vue-auto-create-route",
     "publishConfig": {
         "registry": "https://registry.npmjs.org"

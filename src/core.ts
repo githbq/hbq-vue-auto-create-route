@@ -142,7 +142,7 @@ function createRouteTemplate(tree) {
 
     replaceTasks.push({ key: placeholders.layoutComponent, value: layoutComponentTemplate })
 
-    replaceTasks.push({ key: placeholders.customPath, value: metaInfo.path || '' })
+    replaceTasks.push({ key: placeholders.customPath, value: (metaInfo.path || '').replace(/^\/+/,'') })
 
     delete metaInfo.path
 

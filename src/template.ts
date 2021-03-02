@@ -4,15 +4,13 @@ export default {
     `
 {
   path: '##path##',##redirect##
-  component: () => import('##component##'),
+  component: ##layoutComponent##,
   meta: ##meta##,
   children: [
     {
       path: '/',##redirect##
       name: '##name##', 
-      component:{
-        render(createElement){return createElement('router-view')}
-      },
+      component: ##component##,
     },
     ##children##
   ],
@@ -22,13 +20,13 @@ export default {
     `
 {
       path: '##path##',
-      component: () => import('##component##'),
+      component: ##layoutComponent##,
       meta: ##meta##, 
       children: [
         {
           path: '/',##redirect##
           name: '##name##', 
-          component: () => import('@/##filePath##'),
+          component: ##component##,
         },
       ],
 }
@@ -37,13 +35,13 @@ export default {
     `
 {
   path: '##path##',
-  component: () => import('##component##'),
+  component: ##layoutComponent##,
   meta: ##meta##,
   children: [
     {
       path: '/',##redirect##
       name: '##name##', 
-      component: () => import('@/##filePath##'),
+      component: ##component##,
     },
   ],
 }
@@ -52,13 +50,13 @@ export default {
     `
 {
   path: '##path##',
-  component: () => import('##component##'),
+  component: ##layoutComponent##,
   meta: ##meta##, 
   children: [
     {
       path: '/',##redirect##
       name: '##name##', 
-      component: () => import('@/##filePath##'),
+      component: ##component##,
     },
     ##children##
   ],

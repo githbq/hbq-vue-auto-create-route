@@ -6,21 +6,35 @@ import { js as beautify } from 'js-beautify'
 import * as  throttle from 'lodash.throttle'
 import template from './template'
 import jsPrettyConfig from './js-pretty.json'
+import { notEqual } from 'assert'
 
 
 let defaultLayoutComponent = '@/components/main'
 const placeholders = {
   component: '##component##',
+  layoutComponent: '##layoutComponent##',
   meta: '##meta##',
   children: '##children##',
   path: '##path##',
   name: '##name##',
-  filePath: '##filePath##',
-  redirect: '##redirect##',
-}
+  redirect: '##redirect##', 
+} 
 
 const replacePathSplitForCommon = (str) => str.replace(/\\/g, '/')
 const replacePathSplit = (str) => replacePathSplitForCommon(str).replace(/\//g, path.sep)
+
+const componentTemplates = {
+  emptyComponent: `
+{
+    render(createElement) {
+        return createElement('router-view')
+    }
+}
+  `,
+  dynamicImportComponent: (filePath) => `() => import('@/${replacePathSplitForCommon(filePath)}')`,
+  defaultLayoutComponent: `() => import('${defaultLayoutComponent}')`
+}
+
 
 async function getMetaInfos(cwd) {
   const pagesPath = 'src/pages'
@@ -48,7 +62,12 @@ async function getMetaInfos(cwd) {
     const metaJSONPath = path.resolve(cwd, n)
     const metaJSON = await fs.readJSON(metaJSONPath)
 
-    dic[routePath] = { asEntry, filePath, routePath, metaJSON: metaJSON, level }
+    let component = componentTemplates.dynamicImportComponent(filePath)
+    if (!asEntry) {
+      component = componentTemplates.emptyComponent
+    }
+
+    dic[routePath] = { asEntry, filePath, routePath, metaJSON: metaJSON, level, component }
 
     list.push(dic[routePath])
   })
@@ -68,7 +87,7 @@ function makeTree(data, level = 1, prefix = '') {
   const others = data.filter(n => n.level > level)
 
   roots.filter(n => !data.some(m => m.level > n.level && m.routePath.indexOf(n.routePath) === 0)).forEach(n => n.isLeaf = true)
-  
+
   if (others.length > 0) {
     roots.forEach(n => {
       n.children = makeTree(others, level + 1, n.routePath)
@@ -93,28 +112,37 @@ function createRouteTemplate(tree) {
   const templateStrs = []
   tree.forEach(node => {
     let templateStr = template.leafNode
-    const replaceTasks = [] 
-
+    const replaceTasks = []
     if (node.level === 1 && node.isLeaf) {
       templateStr = template.singleParentNode
-    } else if (!node.isLeaf) { 
-      templateStr = node.asEntry ? template.parentWithEntryNode : template.parentNode
+    } else if (!node.isLeaf) {
+      if (node.asEntry) {
+        templateStr = template.parentWithEntryNode
+      } else {
+        templateStr = template.parentNode
+      }
     }
     // 通用替换部分
     const metaInfo = node.metaJSON
 
     replaceTasks.push({ key: placeholders.meta, value: JSON.stringify(metaInfo) })
 
-    replaceTasks.push({ key: placeholders.filePath, value: replacePathSplitForCommon(node.filePath) })
 
     replaceTasks.push({ key: placeholders.name, value: node.routePath })
+    replaceTasks.push({ key: placeholders.component, value: node.component })
 
-    replaceTasks.push({ key: placeholders.redirect, value: optionsToString({ redirect: metaInfo.redirect ? metaInfo.redirect.split('/').map(n=> !n?n:hyphen(n)).join('/'): undefined }) })
+    replaceTasks.push({ key: placeholders.redirect, value: optionsToString({ redirect: metaInfo.redirect ? metaInfo.redirect.split('/').map(n => !n ? n : hyphen(n)).join('/') : undefined }) })
+
     delete metaInfo.redirect
 
-    const componentPath = node.metaJSON.layoutComponent || (node.parent ? `@/${node.parent.filePath}` : defaultLayoutComponent)
+    let layoutComponentTemplate = componentTemplates.defaultLayoutComponent
+    if (node.metaJSON.layoutComponent) {
+      layoutComponentTemplate = componentTemplates.dynamicImportComponent(node.metaJSON.layoutComponent)
+    } else if (node.parent) {
+      layoutComponentTemplate = node.parent.component
+    } 
 
-    replaceTasks.push({ key: placeholders.component, value: replacePathSplitForCommon(componentPath) })
+    replaceTasks.push({ key: placeholders.layoutComponent, value: layoutComponentTemplate }) 
 
     delete node.metaJSON.layoutComponent
     // 父节点部分
@@ -151,7 +179,7 @@ const main = async (options, hideConsole) => {
   const { cwd, outputRouteFilePath, rootLayoutComponent } = options || {}
   defaultLayoutComponent = rootLayoutComponent || defaultLayoutComponent
   const newCwd = replacePathSplit(cwd || path.resolve('.'))
- 
+
   // 1.获取所有页面元信息
   const metaInfos = await getMetaInfos(newCwd)
   // 2.转换成树形
@@ -160,13 +188,13 @@ const main = async (options, hideConsole) => {
   const finalStr = createRouteTemplate(metaTree)
   // 4.写入文件
   const tempRouteFilePath = outputRouteFilePath || path.join(newCwd, 'src', 'router', 'temp.router.js')
-  
-  fs.removeSync(tempRouteFilePath) 
+
+  fs.removeSync(tempRouteFilePath)
   await fs.outputFile(
     tempRouteFilePath,
-    beautify(`export default [${finalStr}]`,jsPrettyConfig),
+    beautify(`export default [${finalStr}]`, jsPrettyConfig),
   )
   // 5.完成
   hideConsole === false && console.log('\n自动生成vue路由成功@', tempRouteFilePath, '\n')
 }
-export const run = throttle(main, 500, { leading: false, trailing: true }) 
+export const run = throttle(main, 500, { leading: false, trailing: true })

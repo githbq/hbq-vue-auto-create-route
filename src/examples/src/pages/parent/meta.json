@@ -1,4 +1,5 @@
 { 
+    "redirect":"son2",
     "menu": {
         "title": "home",
         "icon": "el-icon-s-help"

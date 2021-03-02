@@ -1,7 +1,8 @@
 
 export default {
   parentNode:
-    `{
+    `
+{
   path: '##path##',##redirect##
   component: () => import('##component##'),
   meta: ##meta##,
@@ -18,7 +19,8 @@ export default {
 }
 `,
   leafNode:
-    `{
+    `
+{
       path: '##path##',
       component: () => import('##component##'),
       meta: ##meta##, 
@@ -32,7 +34,8 @@ export default {
 }
 `,
   singleParentNode:
-    `{
+    `
+{
   path: '##path##',
   component: () => import('##component##'),
   meta: ##meta##,
@@ -46,7 +49,8 @@ export default {
 }
 `,
   parentWithEntryNode:
-    `{
+    `
+{
   path: '##path##',
   component: () => import('##component##'),
   meta: ##meta##, 

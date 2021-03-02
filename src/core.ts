@@ -5,6 +5,7 @@ import { hyphen } from 'naming-style'
 import { js as beautify } from 'js-beautify'
 import * as  throttle from 'lodash.throttle'
 import template from './template'
+import jsPrettyConfig from './js-pretty.json'
 
 
 let defaultLayoutComponent = '@/components/main'
@@ -98,7 +99,6 @@ function createRouteTemplate(tree) {
       templateStr = template.singleParentNode
     } else if (!node.isLeaf) { 
       templateStr = node.asEntry ? template.parentWithEntryNode : template.parentNode
-
     }
     // 通用替换部分
     const metaInfo = node.metaJSON
@@ -164,7 +164,7 @@ const main = async (options, hideConsole) => {
   fs.removeSync(tempRouteFilePath) 
   await fs.outputFile(
     tempRouteFilePath,
-    beautify(`export default [${finalStr}]`, { indent_size: 2, space_in_empty_paren: true }),
+    beautify(`export default [${finalStr}]`,jsPrettyConfig),
   )
   // 5.完成
   hideConsole === false && console.log('\n自动生成vue路由成功@', tempRouteFilePath, '\n')

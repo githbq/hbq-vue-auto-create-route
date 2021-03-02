@@ -11,6 +11,7 @@ export default {
       path: '/',##redirect##
       name: '##name##', 
       component: ##component##,
+      meta: ##meta##,
     },
     ##children##
   ],
@@ -27,6 +28,7 @@ export default {
           path: '/',##redirect##
           name: '##name##', 
           component: ##component##,
+          meta: ##meta##,
         },
       ],
 }
@@ -42,6 +44,7 @@ export default {
       path: '/',##redirect##
       name: '##name##', 
       component: ##component##,
+      meta: ##meta##,
     },
   ],
 }
@@ -57,6 +60,7 @@ export default {
       path: '/',##redirect##
       name: '##name##', 
       component: ##component##,
+      meta: ##meta##,
     },
     ##children##
   ],

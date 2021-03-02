@@ -1,0 +1,15 @@
+{ 
+    "menu": {
+        "title": "home",
+        "icon": "el-icon-s-help"
+    },
+    "yourCustom": "用户可以自定义任何属性",
+    "index": 1,
+    "index_describe": "index属性决定生成的菜单顺序，非必填",
+    "access": [
+        "ADMIN",
+        "USER VISITOR",
+        "GUEST",
+        "VISITOR"
+    ]
+}

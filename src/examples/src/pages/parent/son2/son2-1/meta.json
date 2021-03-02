@@ -1,4 +1,5 @@
 { 
+    "path":":a/:b",
     "menu": {
         "title": "son",
         "icon": "el-icon-s-help"

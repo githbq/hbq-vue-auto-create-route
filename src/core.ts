@@ -16,9 +16,10 @@ const placeholders = {
   meta: '##meta##',
   children: '##children##',
   path: '##path##',
+  customPath: '##customPath##',
   name: '##name##',
-  redirect: '##redirect##', 
-} 
+  redirect: '##redirect##'
+}
 
 const replacePathSplitForCommon = (str) => str.replace(/\\/g, '/')
 const replacePathSplit = (str) => replacePathSplitForCommon(str).replace(/\//g, path.sep)
@@ -127,22 +128,23 @@ function createRouteTemplate(tree) {
 
     replaceTasks.push({ key: placeholders.meta, value: JSON.stringify(metaInfo) })
 
-
     replaceTasks.push({ key: placeholders.name, value: node.routePath })
     replaceTasks.push({ key: placeholders.component, value: node.component })
 
     replaceTasks.push({ key: placeholders.redirect, value: optionsToString({ redirect: metaInfo.redirect ? metaInfo.redirect.split('/').map(n => !n ? n : hyphen(n)).join('/') : undefined }) })
-
     delete metaInfo.redirect
-
     let layoutComponentTemplate = componentTemplates.defaultLayoutComponent
     if (node.metaJSON.layoutComponent) {
       layoutComponentTemplate = componentTemplates.dynamicImportComponent(node.metaJSON.layoutComponent)
     } else if (node.parent) {
       layoutComponentTemplate = node.parent.component
-    } 
+    }
 
-    replaceTasks.push({ key: placeholders.layoutComponent, value: layoutComponentTemplate }) 
+    replaceTasks.push({ key: placeholders.layoutComponent, value: layoutComponentTemplate })
+
+    replaceTasks.push({ key: placeholders.customPath, value: metaInfo.path || '' })
+
+    delete metaInfo.path
 
     delete node.metaJSON.layoutComponent
     // 父节点部分

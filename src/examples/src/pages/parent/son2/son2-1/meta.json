@@ -1,7 +1,8 @@
-{ 
-    "path":":a/:b",
+{
+    "name": "mycustom-name",
+    "path": ":a/:b",
     "menu": {
         "title": "son2-1",
         "icon": "el-icon-s-help"
-    } 
+    }
 }

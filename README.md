@@ -35,6 +35,7 @@
 
 ``` js
 {
+    "name": "you custom name", // 内置属性，非必须，可以覆盖默认生成的路由名 
     "path":":a/:b", // 内置属性，非必须，可以用来支持路径参数，如：/page1/:a/:b ,参数 this.$route.params.a 取值 
     "redirect":"default-child", //内置属性，非必须，父页面可以设置redirect定义默认子页面     -
     "menu": { //自定义 示例，如果不需要展示主界面菜单上，则不配置 menu 项

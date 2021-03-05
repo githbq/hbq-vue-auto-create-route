@@ -9,6 +9,7 @@ export default {
     {
       path: '##customPath##',##redirect##
       name: '##name##', 
+      fullPath:'##fullPath##',
       component: ##component##,
       meta: ##meta##,
     },
@@ -25,6 +26,7 @@ export default {
         {
           path: '##customPath##',##redirect##
           name: '##name##', 
+          fullPath:'##fullPath##',
           component: ##component##,
           meta: ##meta##,
         },
@@ -40,6 +42,7 @@ export default {
     {
       path: '##customPath##',##redirect##
       name: '##name##', 
+      fullPath:'##fullPath##',
       component: ##component##,
       meta: ##meta##,
     },
@@ -55,6 +58,7 @@ export default {
     {
       path: '##customPath##',##redirect##
       name: '##name##', 
+      fullPath:'##fullPath##',
       component: ##component##,
       meta: ##meta##,
     },

@@ -18,6 +18,7 @@ const placeholders = {
   path: '##path##',
   customPath: '##customPath##',
   name: '##name##',
+  fullPath: '##fullPath##',
   redirect: '##redirect##'
 }
 
@@ -127,7 +128,7 @@ function createRouteTemplate(tree) {
     const metaInfo = node.metaJSON
 
     replaceTasks.push({ key: placeholders.meta, value: JSON.stringify(metaInfo) })
-
+    replaceTasks.push({ key: placeholders.fullPath, value: `/${node.routePath.replace(/^\//, '')}` })
     replaceTasks.push({ key: placeholders.name, value: metaInfo.name || `/${node.routePath.replace(/^\//, '')}` })
     replaceTasks.push({ key: placeholders.component, value: node.component })
 

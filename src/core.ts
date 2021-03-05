@@ -128,8 +128,12 @@ function createRouteTemplate(tree) {
     const metaInfo = node.metaJSON
 
     replaceTasks.push({ key: placeholders.meta, value: JSON.stringify(metaInfo) })
-    replaceTasks.push({ key: placeholders.fullPath, value: `/${node.routePath.replace(/^\//, '')}` })
-    replaceTasks.push({ key: placeholders.name, value: metaInfo.name || `/${node.routePath.replace(/^\//, '')}` })
+    const fullPath = `/${node.routePath.replace(/^\//, '')}`
+    replaceTasks.push({ key: placeholders.fullPath, value: fullPath })
+    node.fullPath = fullPath
+    const name = metaInfo.name || `/${node.routePath.replace(/^\//, '')}`
+    replaceTasks.push({ key: placeholders.name, value: name })
+    node.name = name
     replaceTasks.push({ key: placeholders.component, value: node.component })
 
     replaceTasks.push({ key: placeholders.redirect, value: optionsToString({ redirect: metaInfo.redirect ? metaInfo.redirect.split('/').map(n => !n ? n : hyphen(n)).join('/') : undefined }) })
@@ -180,7 +184,7 @@ function createRouteTemplate(tree) {
 function createMetaJSONTree(tree) {
   const metaJSONTree = []
   tree.forEach(node => {
-    const newNode = { path: `/${node.routePath.replace(/^\//, '')}`, meta: node.metaJSON, children: undefined }
+    const newNode = { path: `/${node.routePath.replace(/^\//, '')}`, fullPath: node.fullPath, name: node.name, meta: node.metaJSON, children: undefined }
     metaJSONTree.push(newNode)
     if (node.children && node.children.length > 0) {
       newNode.children = newNode.children || []

@@ -100,24 +100,163 @@ webpack({
 
 你可以直接使用该文件读取对应的 `meta` 节点数据供导航菜单组件使用
 
-``` 
+``` javascript
 export default [{
-  path: '/home',
-  component: () => import('@/components/main'),
-  meta: {
-    "menu": {
-      "title": "home",
-      "icon": "el-icon-s-help"
+        path: '/',
+        component: () => import('@/components/main'),
+        children: [{
+            path: '/',
+            "redirect": "parent",
+            name: '/',
+            fullPath: '/',
+            component: {
+                render(createElement) {
+                    return createElement('router-view')
+                }
+            },
+            meta: {
+                "redirect": "parent",
+                "menu": {
+                    "title": "home",
+                    "icon": "el-icon-s-help"
+                },
+                "yourCustom": "用户可以自定义任何属性",
+                "index_describe": "index属性决定生成的菜单顺序，非必填",
+                "access": ["ADMIN", "USER VISITOR", "GUEST", "VISITOR"]
+            },
+        }, ],
     },
-    "yourCustom": "用户可以自定义任何属性",
-    "index":1,
-    "index_describe": "index属性决定生成的菜单顺序，非必填",
-    "access": ["ADMIN", "USER VISITOR", "GUEST", "VISITOR"]
-  },
-  children: [{
-    path: '/',
-    name: 'home',
-    component: () => import('@/pages/home'),
-  }, ],
-}]
+    {
+        path: '/parent',
+        "redirect": "son-2",
+        component: () => import('@/components/main'),
+        children: [{
+                path: '/',
+                "redirect": "son-2",
+                name: '/parent',
+                fullPath: '/parent',
+                component: {
+                    render(createElement) {
+                        return createElement('router-view')
+                    }
+                },
+                meta: {
+                    "redirect": "son2",
+                    "menu": {
+                        "title": "parent",
+                        "icon": "el-icon-s-help"
+                    },
+                    "yourCustom": "用户可以自定义任何属性",
+                    "index_describe": "index属性决定生成的菜单顺序，非必填",
+                    "access": ["ADMIN", "USER VISITOR", "GUEST", "VISITOR"]
+                },
+            },
+
+            {
+                path: 'son-2',
+                "redirect": "son2-1/xx/yyy",
+                component: {
+                    render(createElement) {
+                        return createElement('router-view')
+                    }
+                },
+                children: [{
+                        path: '/',
+                        "redirect": "son2-1/xx/yyy",
+                        name: '/parent/son-2',
+                        fullPath: '/parent/son-2',
+                        component: {
+                            render(createElement) {
+                                return createElement('router-view')
+                            }
+                        },
+                        meta: {
+                            "redirect": "son2-1/xx/yyy",
+                            "menu": {
+                                "title": "son2",
+                                "icon": "el-icon-s-help"
+                            }
+                        },
+                    },
+
+                    {
+                        path: 'son2-1',
+                        component: {
+                            render(createElement) {
+                                return createElement('router-view')
+                            }
+                        },
+                        children: [{
+                            path: ':a/:b',
+                            name: 'mycustom-name',
+                            fullPath: '/parent/son-2/son2-1',
+                            component: () => import('@/pages/parent/son2/son2-1'),
+                            meta: {
+                                "name": "mycustom-name",
+                                "path": ":a/:b",
+                                "menu": {
+                                    "title": "son2-1",
+                                    "icon": "el-icon-s-help"
+                                }
+                            },
+                        }, ],
+                    }
+
+                ],
+            }
+
+        ],
+    }
+];
+
+export const metaJSONTree = [{
+    "path": "/",
+    "fullPath": "/",
+    "name": "/",
+    "meta": {
+        "menu": {
+            "title": "home",
+            "icon": "el-icon-s-help"
+        },
+        "yourCustom": "用户可以自定义任何属性",
+        "index_describe": "index属性决定生成的菜单顺序，非必填",
+        "access": ["ADMIN", "USER VISITOR", "GUEST", "VISITOR"]
+    }
+}, {
+    "path": "/parent",
+    "fullPath": "/parent",
+    "name": "/parent",
+    "meta": {
+        "menu": {
+            "title": "parent",
+            "icon": "el-icon-s-help"
+        },
+        "yourCustom": "用户可以自定义任何属性",
+        "index_describe": "index属性决定生成的菜单顺序，非必填",
+        "access": ["ADMIN", "USER VISITOR", "GUEST", "VISITOR"]
+    },
+    "children": [{
+        "path": "/parent/son-2",
+        "fullPath": "/parent/son-2",
+        "name": "/parent/son-2",
+        "meta": {
+            "menu": {
+                "title": "son2",
+                "icon": "el-icon-s-help"
+            }
+        },
+        "children": [{
+            "path": "/parent/son-2/son2-1",
+            "fullPath": "/parent/son-2/son2-1",
+            "name": "mycustom-name",
+            "meta": {
+                "name": "mycustom-name",
+                "menu": {
+                    "title": "son2-1",
+                    "icon": "el-icon-s-help"
+                }
+            }
+        }]
+    }]
+}];
 ```

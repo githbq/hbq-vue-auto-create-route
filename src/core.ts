@@ -5,7 +5,7 @@ import { hyphen } from 'naming-style'
 import { js as beautify } from 'js-beautify'
 import * as  throttle from 'lodash.throttle'
 import template from './template'
-import jsPrettyConfig from './js-pretty.json'  
+import jsPrettyConfig from './js-pretty.json'
 
 let defaultLayoutComponent = '@/components/main'
 const placeholders = {
@@ -19,7 +19,7 @@ const placeholders = {
   fullPath: '##fullPath##',
   redirect: '##redirect##'
 }
-
+const pagesPath = 'src/pages'
 const replacePathSplitForCommon = (str) => str.replace(/\\/g, '/')
 const replacePathSplit = (str) => replacePathSplitForCommon(str).replace(/\//g, path.sep)
 
@@ -35,9 +35,37 @@ const componentTemplates = {
   defaultLayoutComponent: `() => import('${defaultLayoutComponent}')`
 }
 
+const getEmptyNode = (routePath) => ({
+  asEntry: false,
+  routePath,
+  metaJSON: {},
+  level: routePath.split('/').length,
+  component: componentTemplates.emptyComponent
+})
+
+function offsetParentMetaJSONInfo(nodes) {
+  console.log('offset')
+  const routeDic = {}
+  const newNodes = []
+  nodes.forEach(node => {
+    const pathNodes = node.routePath.split('/')
+    if (pathNodes <= 1) return
+    for (let i = 1; i < pathNodes.length; i++) {
+      const subPath = pathNodes.slice(0, i).join('/')
+      if (routeDic[subPath]) return
+      let findedNode = nodes.find(n => n.routePath === subPath)
+      if (!findedNode) {
+        findedNode = getEmptyNode(subPath)
+        newNodes.push(findedNode)
+      }
+      routeDic[subPath] = findedNode
+    }
+  })
+  nodes.splice(nodes.length, 0, ...newNodes)
+}
 
 async function getMetaInfos(cwd) {
-  const pagesPath = 'src/pages'
+
   const dic = {}
   const list = []
   let maxLevel = 0
@@ -79,7 +107,11 @@ async function getMetaInfos(cwd) {
   })
   list.sort((a, b) => a.metaJSON.index - b.metaJSON.index)
   list.forEach(n => delete n.metaJSON.index)
-  return { dic, list, maxLevel }
+
+  
+  offsetParentMetaJSONInfo(list)
+  console.log(list)
+  return { list, maxLevel }
 }
 
 function makeTree(data, level = 1, prefix = '') {

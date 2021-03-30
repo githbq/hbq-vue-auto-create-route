@@ -5,9 +5,7 @@ import { hyphen } from 'naming-style'
 import { js as beautify } from 'js-beautify'
 import * as  throttle from 'lodash.throttle'
 import template from './template'
-import jsPrettyConfig from './js-pretty.json'
-import { notEqual } from 'assert'
-
+import jsPrettyConfig from './js-pretty.json'  
 
 let defaultLayoutComponent = '@/components/main'
 const placeholders = {

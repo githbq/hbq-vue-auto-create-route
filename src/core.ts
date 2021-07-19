@@ -43,8 +43,7 @@ const getEmptyNode = (routePath) => ({
   component: componentTemplates.emptyComponent
 })
 
-function offsetParentMetaJSONInfo(nodes) {
-  console.log('offset')
+function offsetParentMetaJSONInfo(nodes) { 
   const routeDic = {}
   const newNodes = []
   nodes.forEach(node => {

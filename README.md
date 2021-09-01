@@ -8,7 +8,7 @@
 
 > 2021-3-30 更新，只要叶子节点有 `meta.json` 父路径会自动补全，详见 `src/examples`
 
-> 2021-9-1 更新，支持自定义页面入口目录对应参数: `entryPath`,示例: `new AutoCreateVueRouteWebpackPlugin({entryPath:'views'})` (以当前工程的 `./src` 为根目录,定义为 `./src/view`)
+> 2021-9-1 更新，支持自定义页面入口目录对应参数: `entryPath`,示例: `new AutoCreateVueRouteWebpackPlugin({entryPath:'views'})` (以当前工程的 `./src` 为根目录,定义为 `./src/views`)
 
 特点:
 

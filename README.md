@@ -8,11 +8,14 @@
 
 > 2021-3-30 更新，只要叶子节点有 `meta.json` 父路径会自动补全，详见 `src/examples`
 
+> 2021-9-1 更新，支持自定义页面入口目录对应参数: `entryPath`,示例: `new AutoCreateVueRouteWebpackPlugin({entryPath:'views'})` (以当前工程的 `./src` 为根目录,定义为 `./src/view`)
+
 特点:
 
+1. 实现工程路由以约定大于配置哲学进行定义
 1. 自动递归识别生成目录层级，支持无限级
 2. 结合导航组件自动生成菜单，支持无限级
-3. 各路径权限单独配置，无需写成一个大文件
+3. 支持各路径权限单独配置，无需写成一个大文件
 4. 修改页面路径直接修改文件夹名称即可
 5. 自动对路径转中划线处理
 6. 采用 `meta.json` 方式配置页面元信息实现更多定制化需求场景
@@ -92,6 +95,31 @@ webpack({
     }
 )
 ```
+
+## vue.config.js @2.0
+
+```js
+const AutoCreateVueRouteWebpackPlugin = require("vue-auto-create-route/build/plugin").default;
+module.exports = {
+  configureWebpack: {
+    plugins: [new AutoCreateVueRouteWebpackPlugin()],
+  },
+};
+
+```
+
+## vue.config.js @3.0
+
+```js
+const AutoCreateVueRouteWebpackPlugin = require("vue-auto-create-route/build/plugin").default;
+module.exports = {
+  configureWebpack: {
+    plugins: [new AutoCreateVueRouteWebpackPlugin({entryPath:'views'})],
+  },
+};
+
+```
+
 
 注意事项：
 
